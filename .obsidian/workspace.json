@@ -4,17 +4,31 @@
     "type": "split",
     "children": [
       {
-        "id": "39c85bfd36fce449",
+        "id": "4110d4e7cfc1ade8",
         "type": "tabs",
         "children": [
           {
-            "id": "09443b6060615718",
+            "id": "9d7448afdafc2ace",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "00-项目总控/项目总大纲.md",
+                "mode": "source",
+                "source": false,
+                "backlinks": true,
+                "backlinkOpts": {
+                  "collapseAll": false,
+                  "extraContext": false,
+                  "sortOrder": "alphabetical",
+                  "showSearch": false,
+                  "searchQuery": "",
+                  "backlinkCollapsed": false,
+                  "unlinkedCollapsed": true
+                }
+              },
               "icon": "lucide-file",
-              "title": "新标签页"
+              "title": "项目总大纲"
             }
           }
         ]
@@ -179,20 +193,27 @@
       "bases:新建数据库": false,
       "obsidian-excalidraw-plugin:新建绘图文件": false,
       "obsidian-kanban:创建新看板": false,
-      "templater-obsidian:Templater": false
+      "templater-obsidian:Templater": false,
+      "githobs:Manage a github issue": false
     }
   },
-  "active": "09443b6060615718",
+  "active": "9d7448afdafc2ace",
   "lastOpenFiles": [
-    "HiveGreatSage.md",
-    "00-项目总控/工作流方案.md",
+    "模板/未命名.canvas",
+    "模板",
+    "99-Ai智能体对话提炼/2026-04-16_网络验证系统_架构决策.md",
+    "99-Ai智能体对话提炼",
+    "01-网络验证系统/API鉴权方案.md",
     "未命名看板.md",
     "Excalidraw/Drawing 2026-04-16 00.09.47.excalidraw.md",
-    "Excalidraw",
     "00-项目总控/项目总大纲.md",
-    "00-项目总控/AI安全术语表_中文简体.md",
-    "01-网络验证系统/数据库设计.md",
+    "00-项目总控/工作流方案.md",
+    "00-项目总控/决策日志.md",
     "01-网络验证系统/接入契约.md",
+    "01-网络验证系统/数据库设计.md",
+    "HiveGreatSage.md",
+    "Excalidraw",
+    "00-项目总控/AI安全术语表_中文简体.md",
     "欢迎.md",
     "00-项目总控/~$安全术语整理_中文简体.docx",
     "00-项目总控/蜂巢大圣_工作流重构方案 - 複製.md",
@@ -200,10 +221,8 @@
     "00-项目总控/AI安全术语整理_中文简体.docx",
     "_模板",
     "新增資料夾",
-    "99-Ai智能体对话提炼",
     "06-游戏适配",
     "05-工具与拓展",
-    "04-官网监控",
-    "03-安卓脚本框架"
+    "04-官网监控"
   ]
 }
