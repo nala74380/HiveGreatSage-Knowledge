@@ -4,17 +4,24 @@
     "type": "split",
     "children": [
       {
-        "id": "39c85bfd36fce449",
+        "id": "4110d4e7cfc1ade8",
         "type": "tabs",
         "children": [
           {
-            "id": "09443b6060615718",
+            "id": "9d7448afdafc2ace",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
-              "icon": "lucide-file",
-              "title": "新标签页"
+              "type": "canvas",
+              "state": {
+                "file": "模板/未命名.canvas",
+                "viewState": {
+                  "x": 0,
+                  "y": 0,
+                  "zoom": 0
+                }
+              },
+              "icon": "lucide-layout-dashboard",
+              "title": "未命名"
             }
           }
         ]
@@ -182,8 +189,11 @@
       "templater-obsidian:Templater": false
     }
   },
-  "active": "09443b6060615718",
+  "active": "9d7448afdafc2ace",
   "lastOpenFiles": [
+    "模板/未命名.canvas",
+    "模板",
+    "00-项目总控/决策日志.md",
     "HiveGreatSage.md",
     "00-项目总控/工作流方案.md",
     "未命名看板.md",
@@ -203,7 +213,6 @@
     "99-Ai智能体对话提炼",
     "06-游戏适配",
     "05-工具与拓展",
-    "04-官网监控",
-    "03-安卓脚本框架"
+    "04-官网监控"
   ]
 }
