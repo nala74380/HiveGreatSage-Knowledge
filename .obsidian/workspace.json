@@ -4,21 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "84243a641b5fc3a2",
+        "id": "39c85bfd36fce449",
         "type": "tabs",
         "children": [
           {
-            "id": "00c0b6fb2b9249de",
+            "id": "09443b6060615718",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "00-项目总控/工作流方案.md",
-                "mode": "source",
-                "source": false
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "工作流方案"
+              "title": "新标签页"
             }
           }
         ]
@@ -180,13 +176,20 @@
       "daily-notes:打开/创建今天的日记": false,
       "templates:插入模板": false,
       "command-palette:打开命令面板": false,
-      "bases:新建数据库": false
+      "bases:新建数据库": false,
+      "obsidian-excalidraw-plugin:新建绘图文件": false,
+      "obsidian-kanban:创建新看板": false,
+      "templater-obsidian:Templater": false
     }
   },
-  "active": "00c0b6fb2b9249de",
+  "active": "09443b6060615718",
   "lastOpenFiles": [
-    "00-项目总控/项目总大纲.md",
+    "HiveGreatSage.md",
     "00-项目总控/工作流方案.md",
+    "未命名看板.md",
+    "Excalidraw/Drawing 2026-04-16 00.09.47.excalidraw.md",
+    "Excalidraw",
+    "00-项目总控/项目总大纲.md",
     "00-项目总控/AI安全术语表_中文简体.md",
     "01-网络验证系统/数据库设计.md",
     "01-网络验证系统/接入契约.md",
@@ -201,7 +204,6 @@
     "06-游戏适配",
     "05-工具与拓展",
     "04-官网监控",
-    "03-安卓脚本框架",
-    "02-PC中控框架"
+    "03-安卓脚本框架"
   ]
 }
