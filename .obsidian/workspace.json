@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "01-网络验证系统/跨账号智能调度分析.md",
+                "file": "02-PC中控框架/跨账号智能调度分析.md",
                 "mode": "source",
                 "source": false
               },
@@ -186,10 +186,10 @@
       "templater-obsidian:Templater": false
     }
   },
-  "active": "99b8c3310381f0c5",
+  "active": "69dde16638643204",
   "lastOpenFiles": [
     "01-网络验证系统/架构设计.md",
-    "01-网络验证系统/跨账号智能调度分析.md",
+    "02-PC中控框架/跨账号智能调度分析.md",
     "00-项目总控/工作流方案.md",
     "02-PC中控框架/架构设计.md",
     "01-网络验证系统/接入契约.md",
