@@ -4,21 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "168ac243d646711b",
+        "id": "d00be2b0fc19feb0",
         "type": "tabs",
         "children": [
           {
-            "id": "99b8c3310381f0c5",
+            "id": "f048c41a65dee6d3",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "01-网络验证系统/架构设计.md",
-                "mode": "source",
-                "source": false
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "架构设计"
+              "title": "新标签页"
             }
           }
         ]
@@ -186,11 +182,13 @@
       "templater-obsidian:Templater": false
     }
   },
-  "active": "99b8c3310381f0c5",
+  "active": "f048c41a65dee6d3",
   "lastOpenFiles": [
+    "00-项目总控/编码规范.md",
+    "欢迎.md",
+    "01-网络验证系统/架构设计.md",
     "01-网络验证系统/API鉴权方案.md",
     "01-网络验证系统/数据库设计.md",
-    "01-网络验证系统/架构设计.md",
     "02-PC中控框架/跨账号智能调度分析.md",
     "00-项目总控/工作流方案.md",
     "02-PC中控框架/架构设计.md",
@@ -207,7 +205,6 @@
     "Excalidraw/Drawing 2026-04-16 00.09.47.excalidraw.md",
     "00-项目总控/决策日志.md",
     "Excalidraw",
-    "欢迎.md",
     "00-项目总控/~$安全术语整理_中文简体.docx",
     "00-项目总控/蜂巢大圣_工作流重构方案 - 複製.md",
     "00-项目总控/蜂巢大圣_工作流重构方案.md",
