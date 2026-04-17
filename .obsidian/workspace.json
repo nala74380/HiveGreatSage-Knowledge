@@ -4,21 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "e4f39cc80dab9578",
+        "id": "1d87a4d0ff88b3b2",
         "type": "tabs",
         "children": [
           {
-            "id": "6fb205f83499026d",
+            "id": "044be38522463074",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "01-网络验证系统/Redis心跳落库策略.md",
-                "mode": "source",
-                "source": false
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "Redis心跳落库策略"
+              "title": "新标签页"
             }
           }
         ]
@@ -186,23 +182,23 @@
       "templater-obsidian:Templater": false
     }
   },
-  "active": "6fb205f83499026d",
+  "active": "044be38522463074",
   "lastOpenFiles": [
-    "01-网络验证系统/API鉴权方案.md",
+    "03-安卓脚本框架/架构设计.md",
+    "02-PC中控框架/架构设计.md",
+    "01-网络验证系统/架构设计.md",
     "01-网络验证系统/Redis心跳落库策略.md",
+    "01-网络验证系统/API鉴权方案.md",
     "02-PC中控框架/跨账号智能调度分析.md",
     "00-项目总控/工作流方案.md",
     "06-游戏适配/_模板_游戏适配文档.md",
     "05-工具与拓展/ADB+CV提取工具.md",
     "04-官网监控/架构设计.md",
     "00-项目总控/项目总大纲.md",
-    "03-安卓脚本框架/架构设计.md",
     "00-项目总控/决策日志.md",
     "00-项目总控/编码规范.md",
     "欢迎.md",
-    "01-网络验证系统/架构设计.md",
     "01-网络验证系统/数据库设计.md",
-    "02-PC中控框架/架构设计.md",
     "01-网络验证系统/接入契约.md",
     "模板/未命名.canvas",
     "HiveGreatSage.md",
