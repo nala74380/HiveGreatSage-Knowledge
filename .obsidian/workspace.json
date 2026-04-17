@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "02-PC中控框架/PC安卓局域网通信方案.md",
+                "file": "03-安卓脚本框架/架构设计.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "PC安卓局域网通信方案"
+              "title": "架构设计"
             }
           }
         ]
@@ -186,11 +186,11 @@
       "templater-obsidian:Templater": false
     }
   },
-  "active": "044be38522463074",
+  "active": "69dde16638643204",
   "lastOpenFiles": [
+    "02-PC中控框架/PC安卓局域网通信方案.md",
     "03-安卓脚本框架/架构设计.md",
     "02-PC中控框架/架构设计.md",
-    "02-PC中控框架/PC安卓局域网通信方案.md",
     "00-项目总控/工作流方案.md",
     "00-项目总控/项目总大纲.md",
     "00-项目总控/AI安全术语表_中文简体.md",
