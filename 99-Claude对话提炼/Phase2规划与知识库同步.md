@@ -1,5 +1,5 @@
 ---
-文件位置: 99-Claude对话提炼/2026-04-25_Phase2规划与知识库同步.md
+文件位置: 99-Claude对话提炼/Phase2规划与知识库同步.md
 名称: Phase 2 规划与知识库全面同步
 作者: 蜂巢·大圣 (Hive-GreatSage)
 时间: 2026-04-25
@@ -95,7 +95,7 @@
 
 按 Phase 2 第一批推进：
 
-```
+```text
 1. T022 — 推演对象存储选型（T004）→ 实现存储抽象层
 2. T023 — 实现多级代理 WITH RECURSIVE 完整查询
 3. T031 — 手动在 hive_game_001 插入 version_record 测试数据，执行 test_update

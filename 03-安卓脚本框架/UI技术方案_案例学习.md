@@ -1,5 +1,5 @@
 ---
-状态: 定稿 v1
+状态: 定稿
 最后更新: 2026-04-18
 关联对话: 03-安卓脚本框架-推演-0418
 前置文档: "[[03-安卓脚本框架/架构设计]] v3"
@@ -9,6 +9,16 @@ tags:
   - H5
   - 动态UI
   - 案例学习
+文件位置: 03-安卓脚本框架/UI技术方案_案例学习.md
+名称: UI技术方案_案例学习
+作者: 蜂巢·大圣 (Hive-GreatSage)
+时间: 2026-05-01
+版本: V1.0.0
+关联文档:
+  - "[[00-项目总控/项目总大纲]]"
+  - "[[03-安卓脚本框架/README]]"
+变更记录:
+  - V1.0.0: 文件规范自动修复；补齐 YAML 字段、双链与代码块语言
 ---
 
 # UI 技术方案 — 案例学习与框架应用
@@ -41,7 +51,7 @@ tags:
 调用 `ui.show("名称")` 后，脚本立即继续往下执行，不会等待界面关闭。
 这使得"倒计时 + 界面"可以在同一线程顺序写出来。
 
-```
+```text
 ui.show("主界面")          ← 立即返回，界面在后台显示
 ↓
 for 倒计时循环              ← 主线程继续跑，每秒更新按钮文字
@@ -394,7 +404,7 @@ H5 方案的 `showUI` 是**阻塞调用**，等价于把一个 WebView 全屏展
 
 **双向通信机制（两条通道）：**
 
-```
+```text
 H5 → Lua（写文件 + confirm）：
   window.bridge.writeStringToFile("/sdcard/config.json", JSON.stringify(data))
   window.bridge.confirm()   ← 触发 Lua 的 showUI 返回
@@ -624,7 +634,7 @@ end)
 
 ## 四、方案选型决策（蜂巢·大圣框架）
 
-```
+```text
 main.ui（启动界面）：
   用动态 UI 方案
   原因：
@@ -646,7 +656,7 @@ main.ui（启动界面）：
 
 ### 5.1 已确认信息
 
-```
+```text
 APK 文件名：TomatoOCR_SF.apk（不是 TomatoOCR.apk）
 加载方式：LuaEngine.loadApk("TomatoOCR_SF.apk")
 类名：    com.tomato.ocr.lr.OCRApi
@@ -754,7 +764,7 @@ setUIWebViewUrl(handle, pageIdx, idname, url)   -- 设置 WebView 地址
 
 ## 七、⚠️ 踩坑记录
 
-```
+```text
 动态 UI：
   · ui.show 非阻塞，倒计时必须用 for+sleep，不能用 setTimer
   · ui.loadProfile 如果文件不存在会报错，必须用 pcall 包裹

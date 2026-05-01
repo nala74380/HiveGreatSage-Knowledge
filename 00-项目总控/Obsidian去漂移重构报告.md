@@ -1,7 +1,7 @@
 ---
 文件位置: 00-项目总控/Obsidian去漂移重构报告.md
 名称: Obsidian去漂移重构报告
-作者: 蜂巢·大圣 (HiveGreatSage)
+作者: 蜂巢·大圣 (Hive-GreatSage)
 时间: 2026-05-01
 版本: V1.0.0
 状态: 定稿

@@ -1586,7 +1586,7 @@ AndroidScript
   → Redis device:runtime:{game_id}:{user_id}:{device_fp}
   → Celery 每 30 秒批量 UPSERT
   → PostgreSQL 游戏库 device_runtime
-```
+```text
 
 ### 理由
 
@@ -1597,7 +1597,7 @@ AndroidScript
 4. PC 中控可以实时读 Redis。
 5. Redis 过期后可回落游戏库历史数据。
 6. 多游戏项目可独立落库，单项目失败不影响其他项目。
-```
+```text
 
 ### 风险
 
@@ -1606,7 +1606,7 @@ AndroidScript
 2. Redis 异常会影响在线态。
 3. 大规模 SCAN 需要压测。
 4. device_runtime 只保留最新状态，不保留历史心跳。
-```
+```text
 
 ### 后续动作
 
@@ -1616,7 +1616,7 @@ AndroidScript
 □ 完成 1,000 台模拟设备压测。
 □ 建立 Celery 任务监控。
 □ 建立 Redis Key 规范文档。
-```
+```text
 ```
 
 ---

@@ -1,7 +1,7 @@
 ---
 文件位置: 01-网络验证系统/API鉴权方案.md
 名称: API鉴权方案
-作者: 蜂巢·大圣 (HiveGreatSage)
+作者: 蜂巢·大圣 (Hive-GreatSage)
 时间: 2026-05-01
 版本: V1.0.0
 状态: 草稿
@@ -108,7 +108,7 @@
 
 ### 3.1 首次登录
 
-```
+```text
 客户端 → POST /api/auth/login { 见接入契约 }
 服务端：
   1. 校验用户名密码、授权、设备（10步验证链）
@@ -122,7 +122,7 @@
 
 ### 3.2 请求鉴权
 
-```
+```text
 客户端每次请求携带 AT 于 Header
 服务端中间件：
   1. 验证 JWT 签名和有效期
@@ -134,7 +134,7 @@
 
 当 AT 过期，客户端使用 RT 换取新 AT。
 
-```
+```text
 客户端 → POST /api/auth/refresh { refresh_token }
 服务端：
   1. 解析 RT JWT，校验签名和有效期
@@ -149,7 +149,7 @@ RT 在有效期内可多次使用，不自动轮换。Phase 2 可按需开启：
 
 ### 3.4 登出
 
-```
+```text
 客户端 → POST /api/auth/logout (需携带 AT)
 服务端：
   1. 解析 AT 获取 jti 和 user_id
@@ -164,7 +164,7 @@ RT 在有效期内可多次使用，不自动轮换。Phase 2 可按需开启：
 
 ### 4.1 Refresh Token 存储
 
-```
+```text
 Key:   refresh:{user_id}:{jti}
 Value: "1"（标记存在即可，实际用户信息从 JWT payload 解析）
 TTL:   与 RT 有效期一致（7天或30天）
@@ -172,7 +172,7 @@ TTL:   与 RT 有效期一致（7天或30天）
 
 ### 4.2 Token 黑名单（登出/撤销）
 
-```
+```text
 Key:   token:blacklist:{jti}
 Value: "revoked"
 TTL:   AT 剩余有效期（通过 exp - now 计算）

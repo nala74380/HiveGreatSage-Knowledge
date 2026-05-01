@@ -1,7 +1,7 @@
 ---
 文件位置: 99-Claude对话提炼/PC中控UI设计.md
 名称: PC中控UI设计
-作者: 蜂巢·大圣 (HiveGreatSage)
+作者: 蜂巢·大圣 (Hive-GreatSage)
 时间: 2026-05-01
 版本: V1.0.0
 状态: 历史归档

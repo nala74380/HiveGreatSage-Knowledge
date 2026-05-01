@@ -1,7 +1,7 @@
 ---
 文件位置: 02-PC中控框架/ADB管理模块.md
 名称: ADB管理模块
-作者: 蜂巢·大圣 (HiveGreatSage)
+作者: 蜂巢·大圣 (Hive-GreatSage)
 时间: 2026-05-01
 版本: V1.0.0
 状态: 草稿
@@ -13,7 +13,7 @@
 
 # ADB 管理模块
 
-> **文档性质：** 模块设计文档（技术定稿） **文档状态：** 定稿 v1 **最后更新：** 2026-04-19 **存放位置：** Obsidian → 02-PC中控框架/ADB管理模块.md **前置文档：** [[架构设计]] v2 **代码位置：** `core/utils/adb_manager.py` **关联 Claude 对话：** 02-PC中控-UI设计-0419
+> **文档性质：** 模块设计文档（技术定稿） **文档状态：** 定稿 v1 **最后更新：** 2026-04-19 **存放位置：** Obsidian → 02-PC中控框架/ADB管理模块.md **前置文档：** [[02-PC中控框架/架构设计|架构设计]] v2 **代码位置：** `core/utils/adb_manager.py` **关联 Claude 对话：** 02-PC中控-UI设计-0419
 
 ---
 
@@ -41,7 +41,7 @@
 
 **放置路径：**
 
-```
+```text
 HiveGreatSage-PCControl/
 └── tools/
     └── adb/
@@ -91,7 +91,7 @@ ADB_EXE    = _PROJ_ROOT / "tools" / "adb" / "platform-tools" / "adb.exe"
 
 **典型 TCP/IP 使用流程：**
 
-```
+```text
 1. USB 连接设备
 2. 调用 enable_tcpip(serial)     → 设备开始监听 5555 端口
 3. 调用 get_ip_address(serial)   → 获取设备 WiFi IP
@@ -133,7 +133,7 @@ adb shell /data/local/tmp/proxy --daemon
 
 ## 四、类结构（core/utils/adb_manager.py）
 
-```
+```text
 AdbManager
   │
   ├── 初始化

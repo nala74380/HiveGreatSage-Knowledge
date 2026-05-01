@@ -1730,31 +1730,31 @@ class TestClientReauthAfterRevokeAll:
 
 ```text
 token_version
-```
+```text
 
 Access Token payload 增加：
 
 ```text
 token_version
-```
+```text
 
 Refresh Token Redis 数据增加：
 
 ```text
 token_version
-```
+```text
 
 鉴权时校验：
 
 ```text
 payload.token_version == user.token_version
-```
+```text
 
 Refresh 时校验：
 
 ```text
 rt_data.token_version == user.token_version
-```
+```text
 
 执行 revoke-all 时：
 
@@ -1762,7 +1762,7 @@ rt_data.token_version == user.token_version
 user.token_version += 1
 删除所有 Refresh Token
 当前 Access Token 加黑名单
-```
+```text
 
 ### 理由
 
@@ -1772,7 +1772,7 @@ user.token_version += 1
 3. 可防止旧 Refresh Token 刷出新 Access Token。
 4. 保留 Redis 黑名单用于 logout 当前设备。
 5. 适合多端、多设备、PCControl + AndroidScript 场景。
-```
+```text
 
 ### 后续动作
 
@@ -1784,7 +1784,7 @@ user.token_version += 1
 □ 修改 redis_client.py Refresh Token 数据结构。
 □ 新增 tests/test_auth_token_version.py。
 □ 三端测试 revoke-all。
-```
+```text
 ```
 
 ```markdown
@@ -1806,7 +1806,7 @@ logout 执行：
 1. 当前 Access Token jti 加入黑名单。
 2. 删除当前 Refresh Token。
 3. 不修改 user.token_version。
-```
+```text
 
 revoke-all 执行：
 
@@ -1814,7 +1814,7 @@ revoke-all 执行：
 1. user.token_version += 1。
 2. 删除该用户所有 Refresh Token。
 3. 当前 Access Token jti 加入黑名单。
-```
+```text
 
 ### 理由
 
@@ -1822,14 +1822,14 @@ revoke-all 执行：
 1. logout 不应误伤其他设备。
 2. revoke-all 才是全设备安全操作。
 3. 黑名单和 token_version 各司其职。
-```
+```text
 
 ### 后续动作
 
 ```text
 □ 测试 logout 不影响其他设备。
 □ 测试 revoke-all 影响所有设备。
-```
+```text
 ```
 
 ---
