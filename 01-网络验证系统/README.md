@@ -1,14 +1,20 @@
 ---
 文件位置: 01-网络验证系统/README.md
 名称: 网络验证系统文档索引
-作者: 蜂巢·大圣 (Hive-GreatSage)
+作者: 蜂巢·大圣 (HiveGreatSage)
 时间: 2026-05-01
-版本: V1.0.0
+版本: V1.0.1
 状态: 草稿
 关联文档:
   - "[[00-项目总控/项目总大纲]]"
   - "[[00-项目总控/文档治理清理清单]]"
+  - "[[01-网络验证系统/实现状态对照表]]"
+  - "[[01-网络验证系统/风险与待决策清单]]"
+  - "[[01-网络验证系统/热更新端到端测试清单]]"
+  - "[[02-PC中控框架/Verify接口调用清单]]"
+  - "[[03-安卓脚本框架/热更新方案]]"
 变更记录:
+  - V1.0.1: 同步热更新链路联动整改；将热更新状态从“真相源统一”调整为“源码层已修复，待运行验证与三端联调闭环”
   - V1.0.0: Obsidian 去漂移重构生成
 ---
 
@@ -32,15 +38,38 @@
 - [[01-网络验证系统/账务中心规则]]
 - [[01-网络验证系统/源码文件逐项审查清单]]
 - [[01-网络验证系统/测试基线]]
+- [[01-网络验证系统/热更新端到端测试清单]]
 
 ## 当前 P0 工作
 
-1. 热更新 VersionRecord 真相源统一。
-2. 旧 User 授权字段清理。
-3. 新 accounting 账务中心替代旧 balance。
-4. IMSI 合规边界决策。
-5. nginx `/updates/` 下载鉴权闭环。
-6. 最新 pytest + frontend build + 三端联调。
+1. 热更新链路运行验证：`tests/test_update.py`、`tests/test_update_admin.py`、管理端上传、客户端检查与下载。
+2. 热更新三端联调：Verify + PCControl + AndroidScript 端到端闭环。
+3. AndroidScript 文件级 SHA-256 校验方案确认与实机安装闭环验证。
+4. PC 中控登录是否占用 Android 授权设备数的边界确认。
+5. 旧 User 授权字段清理。
+6. 新 accounting 账务中心替代旧 balance 后的完整回归验证。
+7. IMSI 合规边界决策。
+8. nginx `/updates/` 下载鉴权闭环。
+9. 最新 pytest + frontend build + 三端联调基线重跑。
+
+## 当前已确认进展
+
+- Verify 源码层已将客户端热更新 `check` / `download` 查询统一到主库 `VersionRecord`。
+- 热更新测试已补充授权请求字段、缓存清理和主库版本记录读取口径。
+- AndroidScript 已同步 Verify 当前 `current_version` / `release_notes` 字段契约。
+- AndroidScript 已取消安装前写入 `hive_script_version` 的旧风险口径。
+
+## 当前不得过度宣称
+
+以下内容在完成运行验证前，不得标记为“已通过”：
+
+```text
+1. 热更新端到端可用。
+2. AndroidScript 已完成 SHA-256 文件校验。
+3. AndroidScript 实机安装闭环已完成。
+4. PCControl exe 自更新已完成。
+5. 三端联调已通过。
+```
 
 ## 已删除 / 合并说明
 
