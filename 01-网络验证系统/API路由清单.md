@@ -1,14 +1,18 @@
 ---
 文件位置: 01-网络验证系统/API路由清单.md
 名称: API路由清单
-作者: 蜂巢·大圣 (Hive-GreatSage)
+作者: 蜂巢·大圣 (HiveGreatSage)
 时间: 2026-05-01
-版本: V1.0.0
+版本: V1.0.1
 状态: 草稿
 关联文档:
   - "[[01-网络验证系统/OpenAPI快照与接口契约治理规范]]"
   - "[[01-网络验证系统/接入契约]]"
+  - "[[01-网络验证系统/热更新端到端测试清单]]"
+  - "[[02-PC中控框架/Verify接口调用清单]]"
+  - "[[03-安卓脚本框架/Verify接口调用清单]]"
 变更记录:
+  - V1.0.1: 同步 Verify 热更新链路小修复；明确客户端 check/download 已改为读取主库 VersionRecord，仍待运行测试验证
   - V1.0.0: Obsidian 去漂移重构生成
 ---
 
@@ -46,6 +50,8 @@
 - `/admin/api/projects/*`
 - `/admin/api/devices/*`
 - `/admin/api/updates/{project_id}/{client_type}`
+- `/admin/api/updates/{project_id}/{client_type}/latest`
+- `/admin/api/updates/{project_id}/{client_type}/history`
 - `/admin/api/accounting/*`
 - `/admin/api/system-settings/*`
 - `/admin/api/project-access/*`
@@ -63,7 +69,7 @@
 1. 旧 API实现清单中的路由数量口径与 API路由清单不一致，已合并到本文件。
 2. 旧 balance 双前缀描述不再作为当前真相源，应以 balance_admin / balance_agent / accounting 当前源码为准。
 3. 热更新后台上传路径应使用 `project_id`，不是 `GAME_PROJECT_CODE`。
-4. 客户端热更新 check/download 真相源仍需与主库 VersionRecord 统一。
+4. 已确认源码层修订：客户端热更新 `check` / `download` 已改为通过主库 `VersionRecord` 读取活跃版本；运行结果仍需执行 `tests/test_update.py` 与端到端联调验证。
 
 ## 维护规则
 
