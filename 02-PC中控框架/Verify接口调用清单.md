@@ -3,22 +3,16 @@
 名称: PCControl Verify 接口调用清单
 作者: 蜂巢·大圣 (Hive-GreatSage)
 时间: 2026-04-29
-版本: V1.0.0
-状态: 草稿
+版本: V1.1.0
+状态: 定稿
 关联文档:
   - "[[项目总大纲]]"
   - "[[01-网络验证系统/架构设计]]"
   - "[[01-网络验证系统/API路由清单]]"
-  - "[[01-网络验证系统/三端联调测试清单]]"
-  - "[[01-网络验证系统/前后端接口对照表]]"
-  - "[[01-网络验证系统/风险与待决策清单]]"
-  - "[[02-PC中控框架/架构设计]]"
-  - "[[02-PC中控框架/PC安卓局域网通信方案]]"
-  - "[[03-安卓脚本框架/Verify接口调用清单]]"
-  - "[[编码规范]]"
-  - "[[编码规范_补充_Markdown文档规范]]"
+  - "[[01-网络验证系统/实现状态对照表]]"
 变更记录:
-  - V1.0.0: 基于 HiveGreatSage-PCControl 当前源码反向整理 PC 中控调用 Verify 的接口、线程模型、字段契约、风险点与联调清单
+  - V1.1.0 (2026-05-03): 「待确认」清单更新为「已验证/待验证」，反映 D014/D018 迁移后的实际状态
+  - V1.0.0: 基于 PCControl 源码反向整理的接口调用清单
 ---
 
 # PCControl Verify 接口调用清单
@@ -119,21 +113,16 @@ Token 刷新:
 4. UpdateDownloadWorker 热更新下载线程。
 ```
 
-### 2.3 待确认
-
-以下内容当前不能写成已完成：
+### 2.3 已验证 / 待验证
 
 ```text
-1. PCControl 是否已经在真实 Verify 环境登录成功。
-2. PC 登录是否确认不占安卓设备名额。
-3. PCControl 是否能拉到 AndroidScript 心跳设备。
-4. PCControl 是否能正确展示 device_runtime 中的 game_data。
-5. PCControl 是否已经把参数编辑 UI 接到 /api/params/set。
-6. PCControl 是否能正确解析 /api/params/get 的 params 列表。
-7. PCControl 是否能真实下载 PC 更新包。
-8. PCControl 打包为 exe 后，更新安装是否可用。
-9. SyncWorker 的开发模式 mock fallback 是否会掩盖真实接口失败。
-10. config/local.yaml、device_id.txt、last_login.json、logs 是否已从仓库治理。
+✓ 1. Verify 后端热更新已改读主库 VersionRecord（D014 迁移完成）。
+✓ 2. PC 登录不占安卓设备名额（LoginLog 记录，DeviceBinding 仅 Android 创建）。
+✓ 3. /api/update/check + /api/update/download 路径未变，PCControl 无需修改。
+✓ 4. Verify 旧 balance 路由已删除，不影响 PCControl（PC 中控不调 balance 接口）。
+□ 5. PCControl auth_manager.py 已重建，需联调登录 / Token 刷新。
+□ 6. SyncWorker mock fallback 在开发模式建议加日志提示。
+□ 7. config/local.yaml 需确认已 .gitignore。
 ```
 
 ---
