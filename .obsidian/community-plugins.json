@@ -1,5 +1,7 @@
 [
   "obsidian-excalidraw-plugin",
   "obsidian-kanban",
-  "templater-obsidian"
+  "templater-obsidian",
+  "open-in-terminal",
+  "mcp-tools"
 ]
