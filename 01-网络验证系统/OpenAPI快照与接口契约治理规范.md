@@ -875,7 +875,7 @@ POST  /admin/api/project-access/requests/{request_id}/reject
 ```text
 1. 决定代理能否售卖项目。
 2. access_status / action_type 必须与前端对齐。
-3. tier_level 不能和 Agent.level 混用。
+3. tier_level 不能和 Agent.hierarchy_depth 混用。
 ```
 
 ---
