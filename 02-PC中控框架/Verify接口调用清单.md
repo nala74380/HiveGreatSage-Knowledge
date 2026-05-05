@@ -11,6 +11,7 @@
   - "[[01-网络验证系统/API路由清单]]"
   - "[[01-网络验证系统/实现状态对照表]]"
 变更记录:
+  - V1.1.1 (2026-05-04): AgentProjectAuthResponse 新增 project_code_name；agent_service._agent_to_response 新增 authorized_projects；agent_profile_service 新增 _ensure_level_policies 自动创建 Lv.1-Lv.4 默认策略
   - V1.1.0 (2026-05-03): 「待确认」清单更新为「已验证/待验证」，反映 D014/D018 迁移后的实际状态
   - V1.0.0: 基于 PCControl 源码反向整理的接口调用清单
 ---
