@@ -2,75 +2,115 @@
 文件位置: 01-网络验证系统/API路由清单.md
 名称: API路由清单
 作者: 蜂巢·大圣 (HiveGreatSage)
-时间: 2026-05-01
-版本: V1.0.1
+时间: 2026-05-06
+版本: V1.1.0
 状态: 草稿
 关联文档:
   - "[[01-网络验证系统/OpenAPI快照与接口契约治理规范]]"
   - "[[01-网络验证系统/接入契约]]"
-  - "[[01-网络验证系统/热更新端到端测试清单]]"
-  - "[[02-PC中控框架/Verify接口调用清单]]"
-  - "[[03-安卓脚本框架/Verify接口调用清单]]"
+  - "[[01-网络验证系统/API鉴权方案]]"
 变更记录:
-  - V1.0.1: 同步 Verify 热更新链路小修复；明确客户端 check/download 已改为读取主库 VersionRecord，仍待运行测试验证
+  - V1.1.0 (2026-05-06): 对齐当前源码；修正用户管理路径为 /api/users/*；标记旧 balance / 旧硬删除接口已清理
+  - V1.0.1: 同步 Verify 热更新链路小修复
   - V1.0.0: Obsidian 去漂移重构生成
 ---
 
 # API路由清单
 
+← 返回 [[项目总大纲]] | 父节点: [[01-网络验证系统/架构设计]]
 
 ## 当前定位
 
-本文件是手写 API 导航清单，不再作为唯一接口真相源。接口字段、请求体、响应体必须以 FastAPI OpenAPI 快照为准。
+本文件是手写 API 导航清单，不是唯一接口真相源。字段、请求体和响应体必须以 FastAPI OpenAPI 快照为准。
 
-## 关键接口组
+## 终端 User 接口
 
-### 终端 User 接口
+```text
+POST /api/auth/login
+POST /api/auth/refresh
+POST /api/auth/logout
+POST /api/auth/revoke-all
+GET  /api/auth/me
 
-- `POST /api/auth/login`
-- `POST /api/auth/refresh`
-- `POST /api/auth/logout`
-- `GET /api/auth/me`
-- `POST /api/auth/revoke-all`
-- `POST /api/device/heartbeat`
-- `GET /api/device/list`
-- `GET /api/device/data`
-- `POST /api/device/imsi`
-- `GET /api/params/get`
-- `POST /api/params/set`
-- `GET /api/update/check`
-- `GET /api/update/download`
-- `GET /api/client/network-config`
+POST /api/device/heartbeat
+GET  /api/device/list
+GET  /api/device/data
+POST /api/device/imsi
 
-### 管理员接口
+GET  /api/params/get
+POST /api/params/set
 
-- `/admin/api/auth/*`
-- `/admin/api/users/*`
-- `/admin/api/agents/*`
-- `/admin/api/projects/*`
-- `/admin/api/devices/*`
-- `/admin/api/updates/{project_id}/{client_type}`
-- `/admin/api/updates/{project_id}/{client_type}/latest`
-- `/admin/api/updates/{project_id}/{client_type}/history`
-- `/admin/api/accounting/*`
-- `/admin/api/system-settings/*`
-- `/admin/api/project-access/*`
+GET  /api/update/check
+GET  /api/update/download
 
-### 代理接口
+GET  /api/client/network-config
+```
 
-- `/api/agents/auth/login`
-- `/api/agents/me`
-- `/api/agents/my/balance`
-- `/api/agents/my/transactions`
-- `/api/agents/my/project-access/*`
+## 管理员接口
 
-## 已确认漂移点
+```text
+POST /admin/api/auth/login
+GET  /admin/api/dashboard
+GET  /admin/api/login-logs/
 
-1. 旧 API实现清单中的路由数量口径与 API路由清单不一致，已合并到本文件。
-2. 旧 balance 双前缀描述不再作为当前真相源，应以 balance_admin / balance_agent / accounting 当前源码为准。
-3. 热更新后台上传路径应使用 `project_id`，不是 `GAME_PROJECT_CODE`。
-4. 已确认源码层修订：客户端热更新 `check` / `download` 已改为通过主库 `VersionRecord` 读取活跃版本；运行结果仍需执行 `tests/test_update.py` 与端到端联调验证。
+/admin/api/projects/*
+/admin/api/agents/{agent_id}/project-auths/*
+/admin/api/devices/*
+/admin/api/updates/*
+/admin/api/accounting/*
+/admin/api/prices/*
+/admin/api/system-settings/*
+/admin/api/project-access/*
+/admin/api/agent-level-policies/*
+/admin/api/agents/{agent_id}/business-profile
+/admin/api/agents/{agent_id}/password
+```
 
-## 维护规则
+## Admin / Agent 共用用户接口
 
-每次改 routers / schemas / dependencies 后，必须重新导出 OpenAPI 快照，并同步更新本清单。
+已确认：用户管理接口不是 `/admin/api/users/*`，当前源码注册路径为：
+
+```text
+/api/users/*
+```
+
+权限边界：
+
+```text
+Admin Token：可管理全部用户。
+Agent Token：当前只管理自己创建的直属用户。
+```
+
+## 代理接口
+
+```text
+POST /api/agents/auth/login
+GET  /api/agents/me
+GET  /api/agents/my/balance
+GET  /api/agents/my/transactions
+GET  /api/agents/my-projects
+GET  /api/agents/scope/list
+/api/agents/my/project-access/*
+```
+
+## 已清理的旧接口 / 旧文件
+
+```text
+app/routers/balance_admin.py
+app/routers/balance_agent.py
+scripts/setup_game_db.py
+DELETE /admin/api/users/{user_id}
+DELETE /admin/api/agents/{agent_id}
+DELETE /admin/api/projects/{project_id}
+```
+
+说明：开发期不做旧接口兼容。旧硬删除接口已从主线清理；用户删除统一走 `/api/users/{user_id}` 软删除，代理/项目不再保留物理硬删除入口。
+
+## 仍需运行验证
+
+```text
+OpenAPI 快照导出
+前端菜单与路由联调
+Admin / Agent / User 鉴权回归测试
+热更新 check/download 端到端联调
+```
