@@ -118,7 +118,10 @@ Admin / Agent Token 服务端吊销表或 Redis 黑名单
 ## 六、当前风险
 
 ```text
-R-AUTH-001：Admin / Agent Token 未接入服务端即时吊销。
+R-AUTH-001：✅ 已修复（2026-05-09）
+  - User token_version 已实现（models.py:260, security.py:61, auth_service.py:485）
+  - Admin / Agent Token 已接入 Redis 黑名单（dependencies.py V1.2.0, security.py V1.1.0）
+
 R-AUTH-002：HTTPBearer 默认无 Token 可能返回 403，后续应统一为 401。
 R-AUTH-003：前端 Admin / Agent Token 当前存 localStorage，生产前需确认 XSS 防护策略。
 ```
