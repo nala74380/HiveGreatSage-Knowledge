@@ -129,3 +129,119 @@ R-AUTH-003：前端 Admin / Agent Token 当前存 localStorage，生产前需确
 2. 新接口不得读取旧 Token 字段 `level` / `project`。
 3. Refresh Token 不得在文档中写成 JWT。
 4. Admin / Agent / User 三类 Token 不得共用解码函数。
+
+---
+
+## 2026-05-09 补充：7x24 User 会话策略已落地
+
+### 背景
+
+PC 中控和 Android 脚本存在 7x24 小时运行场景，User 端不能采用纯网页登录式短会话策略。Verify 已调整为“短 Access Token + 长 Refresh Token + Refresh Token 轮换 + token_version 全量吊销”。
+
+### 当前 User Token 有效期
+
+| 类型 | 当前值 | 用途 |
+|---|---:|---|
+| User Access Token | 30 分钟 | 请求 `/api/device/*`、`/api/params/*`、`/api/update/*`、`/api/auth/me` |
+| User Refresh Token | 30 天 | PC 中控 / Android 脚本无人值守续期 |
+| Admin Token | 8 小时 | 管理后台人工会话 |
+| Agent Token | 8 小时 | 代理后台人工会话 |
+
+Admin / Agent 暂不按 7x24 设备会话处理。
+
+### Access Token payload
+
+User Access Token 新增：
+
+```json
+{
+  "sub": "1001",
+  "authorization_level": "normal",
+  "project_code": "game_001",
+  "token_version": 0,
+  "jti": "uuid-v4",
+  "iat": 1777420800,
+  "exp": 1777422600,
+  "type": "access"
+}
+```
+
+鉴权时必须满足：
+
+```text
+payload.token_version == user.token_version
+```
+
+### Refresh Token 绑定字段
+
+Refresh Token 仍是不透明随机字符串，不是 JWT。Redis 主数据保存：
+
+```json
+{
+  "rt_value": "...",
+  "user_id": 1001,
+  "jti": "...",
+  "device_fingerprint": "...",
+  "client_type": "android",
+  "game_project_code": "game_001",
+  "token_version": 0
+}
+```
+
+Refresh 时必须校验：
+
+```text
+device_fingerprint 一致
+client_type 一致
+rt_data.token_version == user.token_version
+用户 active
+项目 active
+授权 active 且未过期
+```
+
+### Refresh 接口新契约
+
+请求：
+
+```http
+POST /api/auth/refresh
+Content-Type: application/json
+```
+
+```json
+{
+  "refresh_token": "...",
+  "device_fingerprint": "当前设备指纹",
+  "client_type": "pc 或 android"
+}
+```
+
+响应：
+
+```json
+{
+  "access_token": "...",
+  "refresh_token": "新的 Refresh Token",
+  "token_type": "bearer",
+  "expires_in": 1800
+}
+```
+
+每次 refresh 成功后，旧 Refresh Token 立即失效；客户端必须保存响应里的新 Refresh Token。
+
+### revoke-all 语义
+
+`POST /api/auth/revoke-all` 现在会：
+
+```text
+1. 当前 Access Token jti 加入黑名单。
+2. user.token_version += 1。
+3. 删除该用户所有 Refresh Token 主 key。
+```
+
+结果：
+
+```text
+所有旧 Access Token 下一次请求立即 401。
+所有旧 Refresh Token 即使未被清理，也会因 token_version 不匹配而刷新失败。
+```
