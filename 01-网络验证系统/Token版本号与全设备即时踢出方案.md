@@ -3,8 +3,21 @@
 名称: Verify Token 版本号与全设备即时踢出方案
 作者: 蜂巢·大圣 (Hive-GreatSage)
 时间: 2026-04-29
-版本: V1.0.0
-状态: 草稿
+版本: V1.1.0
+状态: 已落地
+---
+
+> **实施状态：✅ 已落地（2026-05-09 审查确认）。**
+>
+> 本文档描述的 token_version 方案已在源码完整实现：
+> - `models.py:260` — `user.token_version` 字段 + `CheckConstraint`
+> - `security.py:61` — `create_access_token` 签发时嵌入 `token_version`
+> - `auth_service.py:255,370,485` — 登录/刷新签发 + revoke_all 递增
+> - `dependencies.py:115-117` — `get_current_user` 校验 `payload.token_version == user.token_version`
+> - `redis_client.py:275,293` — RT v2 存储含 `token_version`
+> - `test_auth.py` — `test_revoke_all_invalidates_all_access_tokens` 验证即时踢出
+>
+> 下文保留作为方案设计参考。
 关联文档:
   - "[[项目总大纲]]"
   - "[[01-网络验证系统/架构设计]]"

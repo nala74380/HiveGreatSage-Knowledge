@@ -2,15 +2,15 @@
 文件位置: 01-网络验证系统/API路由清单.md
 名称: API路由清单
 作者: 蜂巢·大圣 (HiveGreatSage)
-时间: 2026-05-06
-版本: V1.1.0
+时间: 2026-05-10
+版本: V1.2.0
 状态: 草稿
 关联文档:
   - "[[01-网络验证系统/OpenAPI快照与接口契约治理规范]]"
   - "[[01-网络验证系统/接入契约]]"
   - "[[01-网络验证系统/API鉴权方案]]"
 变更记录:
-  - V1.1.0 (2026-05-06): 对齐当前源码；修正用户管理路径为 /api/users/*；标记旧 balance / 旧硬删除接口已清理
+  - V1.2.0 (2026-05-10): 对齐当前源码；修正用户管理路径为 /api/users/*；标记旧 balance / 旧硬删除接口已清理
   - V1.0.1: 同步 Verify 热更新链路小修复
   - V1.0.0: Obsidian 去漂移重构生成
 ---
@@ -50,6 +50,7 @@ GET  /api/client/network-config
 
 ```text
 POST /admin/api/auth/login
+POST /admin/api/session/logout
 GET  /admin/api/dashboard
 GET  /admin/api/login-logs/
 
@@ -62,6 +63,7 @@ GET  /admin/api/login-logs/
 /admin/api/system-settings/*
 /admin/api/project-access/*
 /admin/api/agent-level-policies/*
+/admin/api/audit-logs/*
 /admin/api/agents/{agent_id}/business-profile
 /admin/api/agents/{agent_id}/password
 ```
@@ -85,6 +87,7 @@ Agent Token：当前只管理自己创建的直属用户。
 
 ```text
 POST /api/agents/auth/login
+POST /api/agents/session/logout
 GET  /api/agents/me
 GET  /api/agents/my/balance
 GET  /api/agents/my/transactions
