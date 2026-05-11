@@ -107,7 +107,7 @@ app = FastAPI(
 ```text
 auth
 users
-balance_agent
+agents
 project_access_agent
 agents
 device
@@ -118,7 +118,8 @@ projects
 update_admin
 device_admin
 stats
-balance_admin
+accounting
+pricing
 project_access_admin
 agent_profile_admin
 ```
@@ -130,7 +131,8 @@ agent_profile_admin
 当前源码已明确：
 
 ```text
-balance_agent 必须在 agents.router 之前注册。
+project_access_agent（/api/agents/my/project-access）必须在 agents.router 之前注册。
+agent_scope_management（/api/agents/scope）必须在 agents.router 之前注册。
 ```
 
 原因：
@@ -990,7 +992,7 @@ P2
 已确认：
 
 ```text
-balance_agent 必须在 agents.router 之前注册。
+静态路由（/my/*、/scope/*）必须在 agents.router 含 /{agent_id} 动态路由之前注册。
 ```
 
 处理：

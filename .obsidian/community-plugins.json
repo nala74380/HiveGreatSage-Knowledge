@@ -3,5 +3,6 @@
   "obsidian-kanban",
   "templater-obsidian",
   "open-in-terminal",
-  "mcp-tools"
+  "mcp-tools",
+  "obsidian-local-rest-api"
 ]

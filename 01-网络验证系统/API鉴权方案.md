@@ -31,7 +31,7 @@ Agent Token:       type = agent
 
 已确认：Refresh Token 当前不是 JWT，而是不透明随机字符串，由服务端 Redis 保存映射。
 
-待确认：Admin / Agent Token 仍未接入服务端即时吊销闭环；该项以 [[Token版本号与全设备即时踢出方案]] 为后续方案来源。
+已确认：Admin / Agent Token 已接入 Redis 黑名单（`get_current_admin()` / `get_current_agent()` 均调用 `is_token_revoked()`）。Admin/Agent 的 token_version 全量吊销仍待后续实现。
 
 ## 二、User Access Token
 
