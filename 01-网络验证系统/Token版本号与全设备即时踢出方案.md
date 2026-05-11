@@ -106,7 +106,9 @@
 3. 让所有设备无法再通过 Refresh Token 刷新新的 Access Token。
 ```
 
-当前 `/api/auth/revoke-all` 不能做到：
+> ⚠️ 历史设计阶段内容。当前 token_version 已落地，revoke-all 已可实现以下全部能力。
+
+历史记录 — 旧版 `/api/auth/revoke-all` 不能做到：
 
 ```text
 1. 让其他设备已经签发的 Access Token 立即失效。
@@ -141,7 +143,9 @@ revoke-all 当前只知道“当前这个 Access Token”的 jti。
 
 ### 2.4 推荐结论
 
-后续应引入：
+> ⚠️ 历史设计阶段内容。token_version 已于 2026-05-09 落地。
+
+历史记录 — 后续应引入：
 
 ```text
 user.token_version
@@ -409,7 +413,7 @@ POST /api/auth/refresh
 1. Refresh Token 本身有效期内可多次使用。
 2. Phase 1 不做滚动刷新。
 3. refresh 时不会删除旧 Access Token。
-4. refresh 时不会校验 token_version，因为当前还没有 token_version。
+4. refresh 时不会校验 token_version（历史状态；已于 2026-05-09 落地为 `refresh_access_token` 中校验 `rt_data.token_version == user.token_version`）。
 ```
 
 ---
