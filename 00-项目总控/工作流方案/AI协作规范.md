@@ -3,13 +3,14 @@
 名称: AI协作规范
 作者: 蜂巢·大圣 (Hive-GreatSage)
 时间: 2026-05-12
-版本: V1.1.0
+版本: V1.1.1
 状态: 草稿
 关联文档:
   - "[[00-项目总控/AI安全术语表]]"
   - "[[00-项目总控/工作流方案/README]]"
   - "[[00-项目总控/工作流方案/日常工作循环]]"
 变更记录:
+  - V1.1.1 (2026-05-12): 收口 AI 协作工具口径；从 Claude Project 单一表述扩展为 ChatGPT / DeepSeek / Claude / Cursor Chat 等 AI 协作边界
   - V1.1.0 (2026-05-12): 从临时治理拆分承接区迁移到正式工作流方案目录
   - V1.0.0: 从 工作流方案.md 拆出 AI 协作规范与安全边界
 ---
@@ -27,8 +28,8 @@
 来源内容：
 
 ```text
-1. Claude Project — 主推演区
-2. Claude Project 窗口组织策略
+1. AI Project / AI 对话窗口 — 主推演区
+2. ChatGPT / DeepSeek / Claude / Cursor Chat 等工具的窗口组织策略
 3. 每次开启新对话的标准流程
 4. 给 AI 大局观的方法
 5. AI 输出风险提示
@@ -40,7 +41,7 @@
 
 ## 一、当前定位
 
-AI Project，包括 Claude Project、ChatGPT Project、Cursor Chat 等，是项目的：
+AI Project / AI 对话窗口，包括 ChatGPT、DeepSeek、Claude、Cursor Chat 等，是项目的：
 
 ```text
 推演区
@@ -354,7 +355,7 @@ AI 编造不存在的文件、接口、函数、字段、历史结论。
 3. 文档治理 → 文档治理清理清单。
 4. 代码状态 → 文档代码测试追踪矩阵。
 5. 测试结论 → 测试基线或联调清单。
-6. 对话摘要 → 99-Claude对话提炼 或对应模块文档。
+6. 对话摘要 → 99-Claude对话提炼/ 或对应模块文档；该目录名为历史命名，不代表当前只保存 Claude 对话。
 ```
 
 未沉淀的 AI 对话，不视为项目资产。
