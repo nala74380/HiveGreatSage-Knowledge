@@ -2,8 +2,8 @@
 文件位置: 03-安卓脚本框架/Verify接口调用清单.md
 名称: AndroidScript Verify 接口调用清单
 作者: 蜂巢·大圣 (Hive-GreatSage)
-时间: 2026-04-29
-版本: V1.0.0
+时间: 2026-05-12
+版本: V1.0.1
 状态: 草稿
 关联文档:
   - "[[项目总大纲]]"
@@ -22,7 +22,15 @@
 
 # AndroidScript Verify 接口调用清单
 
-← 返回 [[项目总大纲]] | 父节点: [[03-安卓脚本框架/架构设计]]
+← 返回 [[00-项目总控/项目总大纲]] | 父节点: [[03-安卓脚本框架/架构设计]]
+
+## 当前证据边界
+
+- 本文是 AndroidScript 调用 Verify 接口关系的文档清单。
+- 本文包含历史源码反向整理结论，但本轮未重新逐行复核 AndroidScript 当前 main 源码。
+- 本文不代表所有接口已完成实机登录、心跳落库、参数同步、热更新安装或三端联调。
+- "已确认 / 当前源码已经实现"仅表示当时治理批次登记状态。
+- 涉及发布、联调、闭环判断时，必须重新对照 AndroidScript main 源码、Verify main 源码、测试结果、懒人精灵真机运行结果和 PCControl 设备展示结果。
 
 ## 一、文档目的
 
@@ -43,9 +51,9 @@
 
 ---
 
-## 二、当前结论
+## 二、当前登记结论
 
-### 2.1 已确认
+### 2.1 历史登记为已接入的链路
 
 当前 AndroidScript 已经接入 Verify 的核心链路：
 
@@ -157,7 +165,7 @@ Token 刷新:
 
 ```lua
 Config.API_BASE_URL  = ""
-Config.PROJECT_UUID  = "07238db5-129a-4408-b82a-e025be4652a1"
+Config.PROJECT_UUID = "<project_uuid_example_or_test_value>"
 Config.HEARTBEAT_INTERVAL = 30
 Config.SCRIPT_VERSION = "1.0.0"
 Config.LOG_TO_CLOUD = true
@@ -525,10 +533,10 @@ POST /api/auth/login
 
 ```json
 {
-  "username": "user001",
-  "password": "User@2026!",
-  "project_uuid": "07238db5-129a-4408-b82a-e025be4652a1",
-  "device_fingerprint": "android_device_001",
+  "username": "<username_from_input>",
+  "password": "<password_from_secure_input>",
+  "project_uuid": "<project_uuid_example_or_test_value>",
+  "device_fingerprint": "<device_fingerprint_example>",
   "client_type": "android"
 }
 ```
