@@ -340,7 +340,7 @@ project_uuid = Config.PROJECT_UUID
 ### 当前值
 
 ```lua
-Config.PROJECT_UUID = "07238db5-129a-4408-b82a-e025be4652a1"
+Config.PROJECT_UUID = "<project_uuid_example_or_test_value>"
 ```
 
 ### 设计要求
