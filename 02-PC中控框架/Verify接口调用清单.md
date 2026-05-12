@@ -2,15 +2,19 @@
 文件位置: 02-PC中控框架/Verify接口调用清单.md
 名称: PCControl Verify 接口调用清单
 作者: 蜂巢·大圣 (Hive-GreatSage)
-时间: 2026-04-29
-版本: V1.1.0
-状态: 定稿
+时间: 2026-05-12
+版本: V1.1.2
+状态: 草稿
 关联文档:
-  - "[[项目总大纲]]"
+  - "[[00-项目总控/项目总大纲]]"
+  - "[[00-项目总控/术语表]]"
+  - "[[00-项目总控/文档代码测试追踪矩阵]]"
   - "[[01-网络验证系统/架构设计]]"
   - "[[01-网络验证系统/API路由清单]]"
   - "[[01-网络验证系统/实现状态对照表]]"
+  - "[[02-PC中控框架/架构设计]]"
 变更记录:
+  - V1.1.2 (2026-05-12): 目录级治理；修正 frontmatter 版本漂移和定稿状态；补充 PCControl Verify 调用清单证据边界；清理示例密码和裸链
   - V1.1.1 (2026-05-04): AgentProjectAuthResponse 新增 project_code_name；agent_service._agent_to_response 新增 authorized_projects；agent_profile_service 新增 _ensure_level_policies 自动创建 Lv.1-Lv.4 默认策略
   - V1.1.0 (2026-05-03): 「待确认」清单更新为「已验证/待验证」，反映 D014/D018 迁移后的实际状态
   - V1.0.0: 基于 PCControl 源码反向整理的接口调用清单
@@ -18,7 +22,15 @@
 
 # PCControl Verify 接口调用清单
 
-← 返回 [[项目总大纲]] | 父节点: [[02-PC中控框架/架构设计]]
+← 返回 [[00-项目总控/项目总大纲]] | 父节点: [[02-PC中控框架/架构设计]]
+
+## 当前证据边界
+
+- 本文是 PCControl 调用 Verify 接口关系的文档清单。
+- 本文包含历史源码反向整理结论，但本轮未重新逐行复核 PCControl 当前 main 源码。
+- 本文不代表所有接口已完成联调、测试运行或生产可用验证。
+- "已确认 / 已验证"仅表示当时治理批次登记状态。
+- 涉及发布、联调、闭环判断时，必须重新对照 PCControl main 源码、Verify main 源码、测试结果和实际运行结果。
 
 ## 一、文档目的
 
@@ -39,9 +51,9 @@
 
 ---
 
-## 二、当前结论
+## 二、当前登记结论
 
-### 2.1 已确认
+### 2.1 历史登记为已接入的链路
 
 当前 PCControl 已经接入 Verify 的核心链路：
 
@@ -117,13 +129,13 @@ Token 刷新:
 ### 2.3 已验证 / 待验证
 
 ```text
-✓ 1. Verify 后端热更新已改读主库 VersionRecord（D014 迁移完成）。
-✓ 2. PC 登录不占安卓设备名额（LoginLog 记录，DeviceBinding 仅 Android 创建）。
-✓ 3. /api/update/check + /api/update/download 路径未变，PCControl 无需修改。
-✓ 4. Verify 旧 balance 路由已删除，不影响 PCControl（PC 中控不调 balance 接口）。
-□ 5. PCControl auth_manager.py 已重建，需联调登录 / Token 刷新。
-□ 6. SyncWorker mock fallback 在开发模式建议加日志提示。
-□ 7. config/local.yaml 需确认已 .gitignore。
+✅ 1. Verify 后端热更新已改读主库 VersionRecord（D014 迁移完成）。
+✅ 2. PC 登录不占安卓设备名额（LoginLog 记录，DeviceBinding 仅 Android 创建）。
+✅ 3. /api/update/check + /api/update/download 路径未变，PCControl 无需修改。
+✅ 4. Verify 旧 balance 路由已删除，不影响 PCControl（PC 中控不调 balance 接口）。
+🔲 5. PCControl auth_manager.py 已重建，需联调登录 / Token 刷新。
+🔲 6. SyncWorker mock fallback 在开发模式建议加日志提示。
+🔲 7. config/local.yaml 需确认已 .gitignore。
 ```
 
 ---
@@ -370,7 +382,7 @@ config/local.yaml 当前属于本地环境配置，不应入库。
 
 ```yaml
 server:
-  project_uuid: "a46e3eff-2b46-4cb9-b58f-877917bf5c03"
+  project_uuid: "<project_uuid_example_or_test_value>"
 ```
 
 ### 当前用途
@@ -388,6 +400,8 @@ server:
 2. 必须与 AndroidScript 的 Config.PROJECT_UUID 一致。
 3. fork 新游戏时必须修改。
 4. PCControl 不应让普通用户修改 project_uuid。
+
+project_uuid 可以记录示例值 / 测试值 / 生产值类型，但不得把生产标识与真实凭据混写。
 ```
 
 ### 当前风险
@@ -528,8 +542,8 @@ POST /api/auth/login
 
 ```json
 {
-  "username": "user001",
-  "password": "User@2026!",
+  "username": "<username_from_input>",
+  "password": "<password_from_secure_input>",
   "project_uuid": "项目 UUID",
   "device_fingerprint": "pc_control_uuid",
   "client_type": "pc"
@@ -589,6 +603,7 @@ hardware_serial 来自 config/device_id.txt。
 2. UserInfo 只解析 user_level 和 game_project_code，未解析授权到期、设备额度等字段。
 3. PC 登录是否不占设备名额，需要 Verify 后端实测确认。
 4. keyring 记住密码属于用户便利功能，但需确认安全边界。
+5. 文档中禁止记录真实用户名、真实密码、真实 Token、真实 Refresh Token 或生产 project_uuid。
 ```
 
 ### 建议方案
@@ -1464,15 +1479,15 @@ PCControl 最多展示脱敏结果。
 ## 13.1 P0：三端联调前必须确认
 
 ```text
-□ server.api_base_url 指向当前 Verify。
-□ server.project_uuid 与 Verify 项目一致。
-□ server.project_uuid 与 AndroidScript PROJECT_UUID 一致。
-□ PC 登录 Verify 成功。
-□ PC 登录不占安卓设备名额。
-□ SyncWorker 能拉 /api/device/list。
-□ AndroidScript 心跳后 PC 能看到设备。
-□ 401 Token 刷新链路可用。
-□ config/local.yaml 不作为代码真相源。
+- [ ] server.api_base_url 指向当前 Verify。
+- [ ] server.project_uuid 与 Verify 项目一致。
+- [ ] server.project_uuid 与 AndroidScript PROJECT_UUID 一致。
+- [ ] PC 登录 Verify 成功。
+- [ ] PC 登录不占安卓设备名额。
+- [ ] SyncWorker 能拉 /api/device/list。
+- [ ] AndroidScript 心跳后 PC 能看到设备。
+- [ ] 401 Token 刷新链路可用。
+- [ ] config/local.yaml 不作为代码真相源。
 ```
 
 ---
@@ -1480,13 +1495,13 @@ PCControl 最多展示脱敏结果。
 ## 13.2 P1：联调后必须修订
 
 ```text
-□ 登录成功后调用 /api/auth/me 获取完整用户状态。
-□ UserInfo 补 valid_until、authorized_devices、project_name。
-□ 参数 UI 接入 /api/params/get 和 /api/params/set。
-□ 增加 ParamCodec 处理 JSON 字符串值。
-□ 热更新字段统一 latest_version / version。
-□ 打包 exe 热更新实测 updater.bat。
-□ mock fallback 增加明显“开发模式”标识。
+- [ ] 登录成功后调用 /api/auth/me 获取完整用户状态。
+- [ ] UserInfo 补 valid_until、authorized_devices、project_name。
+- [ ] 参数 UI 接入 /api/params/get 和 /api/params/set。
+- [ ] 增加 ParamCodec 处理 JSON 字符串值。
+- [ ] 热更新字段统一 latest_version / version。
+- [ ] 打包 exe 热更新实测 updater.bat。
+- [ ] mock fallback 增加明显“开发模式”标识。
 ```
 
 ---
@@ -1494,13 +1509,13 @@ PCControl 最多展示脱敏结果。
 ## 13.3 P2：长期治理
 
 ```text
-□ 引入统一 401 refresh retry 机制。
-□ device_meta.json 纳入本地配置治理。
-□ last_login.json 纳入本地配置治理。
-□ device_id.txt 纳入本地配置治理。
-□ logs/ 纳入仓库清理。
-□ local.yaml 改为 local.example.yaml。
-□ 添加 PCControl 接口集成测试。
+- [ ] 引入统一 401 refresh retry 机制。
+- [ ] device_meta.json 纳入本地配置治理。
+- [ ] last_login.json 纳入本地配置治理。
+- [ ] device_id.txt 纳入本地配置治理。
+- [ ] logs/ 纳入仓库清理。
+- [ ] local.yaml 改为 local.example.yaml。
+- [ ] 添加 PCControl 接口集成测试。
 ```
 
 ---
@@ -1510,16 +1525,16 @@ PCControl 最多展示脱敏结果。
 ## 14.1 登录测试
 
 ```text
-□ 正确账号密码登录成功。
-□ 密码错误登录失败。
-□ 项目 UUID 错误登录失败。
-□ 无授权登录失败。
-□ 授权过期登录失败。
-□ 用户停用登录失败。
-□ 登录限流显示友好提示。
-□ 登录成功后 access_token 存在。
-□ 登录成功后 refresh_token 存入 keyring。
-□ 最后登录用户名写入 last_login.json。
+- [ ] 正确账号密码登录成功。
+- [ ] 密码错误登录失败。
+- [ ] 项目 UUID 错误登录失败。
+- [ ] 无授权登录失败。
+- [ ] 授权过期登录失败。
+- [ ] 用户停用登录失败。
+- [ ] 登录限流显示友好提示。
+- [ ] 登录成功后 access_token 存在。
+- [ ] 登录成功后 refresh_token 存入 keyring。
+- [ ] 最后登录用户名写入 last_login.json。
 ```
 
 ---
@@ -1527,11 +1542,11 @@ PCControl 最多展示脱敏结果。
 ## 14.2 Token 测试
 
 ```text
-□ Access Token 过期后，SyncWorker 刷新成功。
-□ Refresh Token 失效后，弹出重新登录。
-□ device_id.txt 删除后，旧 Refresh Token 无法解密，能提示重新登录。
-□ 登出后内存 access_token 清空。
-□ 登出后 SyncWorker 停止。
+- [ ] Access Token 过期后，SyncWorker 刷新成功。
+- [ ] Refresh Token 失效后，弹出重新登录。
+- [ ] device_id.txt 删除后，旧 Refresh Token 无法解密，能提示重新登录。
+- [ ] 登出后内存 access_token 清空。
+- [ ] 登出后 SyncWorker 停止。
 ```
 
 ---
@@ -1539,16 +1554,16 @@ PCControl 最多展示脱敏结果。
 ## 14.3 设备同步测试
 
 ```text
-□ AndroidScript 登录并上报心跳。
-□ PCControl 登录同一用户同一项目。
-□ SyncWorker 启动。
-□ /api/device/list 返回设备。
-□ UI 显示设备在线。
-□ UI 显示 last_seen。
-□ UI 显示 status。
-□ UI 可展示 game_data。
-□ AndroidScript 停止心跳后，PC 端在线态变为离线。
-□ 网络断开时 UI 显示同步错误。
+- [ ] AndroidScript 登录并上报心跳。
+- [ ] PCControl 登录同一用户同一项目。
+- [ ] SyncWorker 启动。
+- [ ] /api/device/list 返回设备。
+- [ ] UI 显示设备在线。
+- [ ] UI 显示 last_seen。
+- [ ] UI 显示 status。
+- [ ] UI 可展示 game_data。
+- [ ] AndroidScript 停止心跳后，PC 端在线态变为离线。
+- [ ] 网络断开时 UI 显示同步错误。
 ```
 
 ---
@@ -1556,15 +1571,15 @@ PCControl 最多展示脱敏结果。
 ## 14.4 参数测试
 
 ```text
-□ /api/params/get 能返回参数定义。
-□ bool 参数渲染为复选框。
-□ int 参数渲染为数字输入。
-□ string 参数渲染为文本输入。
-□ enum 参数渲染为下拉框。
-□ 修改参数后 POST /api/params/set。
-□ 保存成功后提示 updated_count。
-□ failed_count > 0 时显示失败项。
-□ AndroidScript 再次拉参数能拿到新值。
+- [ ] /api/params/get 能返回参数定义。
+- [ ] bool 参数渲染为复选框。
+- [ ] int 参数渲染为数字输入。
+- [ ] string 参数渲染为文本输入。
+- [ ] enum 参数渲染为下拉框。
+- [ ] 修改参数后 POST /api/params/set。
+- [ ] 保存成功后提示 updated_count。
+- [ ] failed_count > 0 时显示失败项。
+- [ ] AndroidScript 再次拉参数能拿到新值。
 ```
 
 ---
@@ -1572,16 +1587,16 @@ PCControl 最多展示脱敏结果。
 ## 14.5 热更新测试
 
 ```text
-□ 当前 APP_VERSION = 1.0.0。
-□ Verify 上传 pc 1.0.1 包。
-□ PCControl 检查到新版本。
-□ 弹窗显示 release_notes。
-□ 下载 zip 包。
-□ SHA-256 校验通过。
-□ 开发模式解压重启成功。
-□ exe 模式生成 updater.bat。
-□ exe 模式覆盖更新成功。
-□ force_update=true 时不能忽略更新。
+- [ ] 当前 APP_VERSION = 1.0.0。
+- [ ] Verify 上传 pc 1.0.1 包。
+- [ ] PCControl 检查到新版本。
+- [ ] 弹窗显示 release_notes。
+- [ ] 下载 zip 包。
+- [ ] SHA-256 校验通过。
+- [ ] 开发模式解压重启成功。
+- [ ] exe 模式生成 updater.bat。
+- [ ] exe 模式覆盖更新成功。
+- [ ] force_update=true 时不能忽略更新。
 ```
 
 ---
@@ -1589,13 +1604,13 @@ PCControl 最多展示脱敏结果。
 ## 14.6 仓库治理测试
 
 ```text
-□ config/local.yaml 不入库。
-□ config/device_id.txt 不入库。
-□ config/last_login.json 不入库。
-□ config/device_meta.json 不入库。
-□ logs/ 不入库。
-□ .idea/ 不入库。
-□ 提供 config/local.example.yaml。
+- [ ] config/local.yaml 不入库。
+- [ ] config/device_id.txt 不入库。
+- [ ] config/last_login.json 不入库。
+- [ ] config/device_meta.json 不入库。
+- [ ] logs/ 不入库。
+- [ ] .idea/ 不入库。
+- [ ] 提供 config/local.example.yaml。
 ```
 
 ---
@@ -1762,11 +1777,11 @@ PCControl 不负责：
 ### 后续动作
 
 ```text
-□ 补 PCControl 三端联调报告。
-□ 补参数 UI 与 Verify 参数契约对齐。
-□ 补 PC 热更新 exe 打包测试。
-□ 补 PC 登录不占设备名额测试。
-□ 清理 local.yaml、device_id.txt、last_login.json、logs。
+- [ ] 补 PCControl 三端联调报告。
+- [ ] 补参数 UI 与 Verify 参数契约对齐。
+- [ ] 补 PC 热更新 exe 打包测试。
+- [ ] 补 PC 登录不占设备名额测试。
+- [ ] 清理 local.yaml、device_id.txt、last_login.json、logs。
 ```text
 ```
 

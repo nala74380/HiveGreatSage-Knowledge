@@ -4,6 +4,5 @@
   "templater-obsidian",
   "open-in-terminal",
   "mcp-tools",
-  "obsidian-local-rest-api",
-  "obsidian-git"
+  "obsidian-local-rest-api"
 ]
