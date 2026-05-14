@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "fffd7e70418945a2",
+        "id": "c34b72872d5b55bc",
         "type": "tabs",
         "children": [
           {
-            "id": "1ecee54b633c340d",
+            "id": "200ed186eefafb68",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -179,12 +179,14 @@
       "bases:新建数据库": false,
       "obsidian-excalidraw-plugin:新建绘图文件": false,
       "obsidian-kanban:创建新看板": false,
-      "templater-obsidian:Templater": false,
-      "obsidian-git:Open Git source control": false
+      "templater-obsidian:Templater": false
     }
   },
-  "active": "1ecee54b633c340d",
+  "active": "200ed186eefafb68",
   "lastOpenFiles": [
+    "01-网络验证系统/架构设计]], [[待决策清单]], [[决策日志.md",
+    "01-网络验证系统/开发启动流程.md",
+    "desktop.ini",
     "02-PC中控框架/ui设计/desktop.ini",
     "00-项目总控/工作流方案/desktop.ini",
     "00-项目总控/desktop.ini",
@@ -194,8 +196,6 @@
     "05-工具与拓展/desktop.ini",
     "04-官网监控/desktop.ini",
     "03-安卓脚本框架/desktop.ini",
-    "01-网络验证系统/desktop.ini",
-    "desktop.ini",
     "00-项目总控/工作流方案/日常工作循环.md",
     "00-项目总控/工作流方案/对话提炼流程.md",
     "00-项目总控/工作流方案/常见问题.md",
@@ -220,7 +220,6 @@
     "01-网络验证系统/测试体系与质量门禁规范.md",
     "01-网络验证系统/三端联调测试清单.md",
     "01-网络验证系统/设备绑定项目维度复核清单.md",
-    "01-网络验证系统/API鉴权方案.md",
     "模板/未命名.canvas"
   ]
 }
