@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "c34b72872d5b55bc",
+        "id": "95f4868ed50e6276",
         "type": "tabs",
         "children": [
           {
-            "id": "200ed186eefafb68",
+            "id": "26455392589888a8",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -182,7 +182,7 @@
       "templater-obsidian:Templater": false
     }
   },
-  "active": "200ed186eefafb68",
+  "active": "26455392589888a8",
   "lastOpenFiles": [
     "01-网络验证系统/架构设计]], [[待决策清单]], [[决策日志.md",
     "01-网络验证系统/开发启动流程.md",
