@@ -2,8 +2,8 @@
 文件位置: 01-网络验证系统/OpenAPI快照与接口契约治理规范.md
 名称: Verify OpenAPI 快照与接口契约治理规范
 作者: 蜂巢·大圣 (Hive-GreatSage)
-时间: 2026-04-29
-版本: V1.0.0
+时间: 2026-05-18
+版本: V1.0.2
 状态: 草稿
 关联文档:
   - "[[项目总大纲]]"
@@ -18,12 +18,44 @@
   - "[[编码规范]]"
   - "[[编码规范_补充_Markdown文档规范]]"
 变更记录:
+  - V1.0.2 (2026-05-18): 批次12收口；同步最新快照统计 schemas=96，并补充“授权 PATCH 已下线”核对结果
+  - V1.0.1 (2026-05-18): 批次11收口；补充最新快照导出结果（openapi_2026-05-17.json，112 paths / 97 schemas）与执行命令基线
   - V1.0.0: 基于 HiveGreatSage-Verify 当前 app/main.py 路由注册与 FastAPI OpenAPI 能力，整理 OpenAPI 快照生成、归档、比对、破坏性变更治理与三端契约同步规范
 ---
 
 # Verify OpenAPI 快照与接口契约治理规范
 
 ← 返回 [[项目总大纲]] | 父节点: [[01-网络验证系统/API路由清单]]
+
+## 批次11最新快照基线（2026-05-18）
+
+本轮已在 `HiveGreatSage-Verify` 根目录执行：
+
+```bash
+python scripts/export_openapi.py
+```
+
+实际产物（脚本按 UTC 日期命名）：
+
+```text
+docs/openapi/openapi_2026-05-17.json
+docs/openapi/openapi_routes_2026-05-17.md
+```
+
+快照摘要：
+
+```text
+title   = HiveGreatSage-Verify
+version = 0.1.0
+paths   = 112
+schemas = 96
+```
+
+路由核对补充（批次12）：
+
+```text
+PATCH /api/users/{user_id}/authorizations/{auth_id} 已不在 OpenAPI 路由清单中。
+```
 
 ## 一、文档目的
 
