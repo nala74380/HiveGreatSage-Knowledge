@@ -546,6 +546,9 @@ POST /api/auth/login
   "password": "<password_from_secure_input>",
   "project_uuid": "项目 UUID",
   "device_fingerprint": "pc_control_uuid",
+  "device_id": "pc_control_uuid",
+  "connection_type": "tcp",
+  "connection_label": "http://127.0.0.1:8000",
   "client_type": "pc"
 }
 ```
@@ -558,6 +561,9 @@ POST /api/auth/login
     "password": password,
     "project_uuid": self._config.get("server.project_uuid", ""),
     "device_fingerprint": hardware_serial,
+    "device_id": hardware_serial,
+    "connection_type": "tcp",
+    "connection_label": self._config.get("server.api_base_url", "") or "pc",
     "client_type": CLIENT_TYPE,
 }
 ```
@@ -567,7 +573,7 @@ POST /api/auth/login
 ```text
 CLIENT_TYPE = pc
 hardware_serial 来自 config/device_id.txt。
-首次运行时生成 UUID4。
+当前开发期沿用该本机文件保存 PC 端内部稳定绑定键。
 ```
 
 ### 成功处理
@@ -643,7 +649,9 @@ POST /api/auth/refresh
 
 ```json
 {
-  "refresh_token": "..."
+  "refresh_token": "...",
+  "device_fingerprint": "pc_control_uuid",
+  "client_type": "pc"
 }
 ```
 
@@ -651,7 +659,7 @@ POST /api/auth/refresh
 
 ```text
 1. 从 keyring 读取加密 Refresh Token。
-2. 使用 device_id 解密。
+2. 使用 device_fingerprint 作为本机稳定绑定键参与刷新请求。
 3. 调用 /api/auth/refresh。
 4. 更新 access_token。
 5. 如果后端返回新的 refresh_token，则更新 keyring。
@@ -1327,15 +1335,16 @@ PCControl 只读取设备列表和设备详情。
 
 ---
 
-## 10.4 `/api/device/imsi`
+## 10.4 设备标识边界
 
-PCControl 不应调用。
+PCControl 不调用设备附加标识上传接口。
 
-说明：
+当前口径：
 
 ```text
-IMSI 采集如启用，也应由 AndroidScript 上报。
-PCControl 最多展示脱敏结果。
+1. PCControl 登录时提交 device_fingerprint / device_id / connection_type / connection_label。
+2. PCControl 只消费 /api/device/list 与 /api/device/data。
+3. AndroidScript 负责上报设备运行数据与连接标识。
 ```
 
 ---
@@ -1349,7 +1358,10 @@ PCControl 最多展示脱敏结果。
 | `username` | 登录窗口输入 | 是 | 用户账号 |
 | `password` | 登录窗口输入 | 是 | 用户密码 |
 | `project_uuid` | `server.project_uuid` | 是 | 游戏项目 UUID |
-| `device_fingerprint` | `config/device_id.txt` | 是 | PC 本机 UUID |
+| `device_fingerprint` | `config/device_id.txt` | 是 | PC 本机内部稳定绑定键 |
+| `device_id` | 当前开发期沿用 `config/device_id.txt` | 是 | 对外暴露的设备编号 |
+| `connection_type` | 固定 `tcp` | 是 | 连接类型 |
+| `connection_label` | `server.api_base_url` 或联调端点 | 否 | 连接标识展示串 |
 | `client_type` | `CLIENT_TYPE` | 是 | 固定 `pc` |
 
 ## 11.2 Verify → PCControl 登录响应字段
@@ -1369,7 +1381,10 @@ PCControl 最多展示脱敏结果。
 
 | 字段 | 当前用途 | 说明 |
 |---|---|---|
-| `device_id` | 映射 DeviceInfo | 安卓设备指纹 |
+| `device_fingerprint` | 内部稳定绑定键 | 设备绑定主键 |
+| `device_id` | 用户自定义设备编号 | UI 主展示字段 |
+| `connection_type` | 连接类型 | `tcp` / `usb` / `unknown` |
+| `connection_label` | 连接标识展示串 | 如 `192.168.1.8:5555` |
 | `user_id` | 可展示/关联 | 用户 ID |
 | `status` | 展示运行状态 | running / idle / error |
 | `last_seen` | 展示最后心跳 | ISO 时间 |

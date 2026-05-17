@@ -792,7 +792,6 @@ GET  /api/auth/me
 POST /api/device/heartbeat
 GET  /api/device/list
 GET  /api/device/data
-POST /api/device/imsi
 ```
 
 高风险原因：

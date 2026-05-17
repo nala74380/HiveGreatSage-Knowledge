@@ -79,7 +79,7 @@
 5. AndroidScript 文件级 SHA-256 校验方案确认与实机安装闭环验证。
 6. PC 中控登录是否占用 Android 授权设备数的边界确认。
 7. 新 accounting 账务中心替代旧 balance 后的完整回归验证。
-8. IMSI 合规边界决策。
+8. 设备标识重构后的三端实机联调与验收。
 9. nginx `/updates/` 下载鉴权闭环。
 10. 最新 pytest + frontend build + 三端联调基线重跑。
 

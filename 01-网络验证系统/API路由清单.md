@@ -51,7 +51,6 @@ GET  /api/auth/me
 POST /api/device/heartbeat
 GET  /api/device/list
 GET  /api/device/data
-POST /api/device/imsi
 
 GET  /api/params/get
 POST /api/params/set
@@ -66,8 +65,9 @@ GET  /api/client/network-config
 
 ```text
 1. /api/device/list 与 /api/device/data 属于终端用户设备链。
-2. 该链当前保留 device_id 原文，用于 User Token 闭环查询单台设备。
-3. 后台设备监控不应复用该链路做原文展示。
+2. 该链当前以 `device_fingerprint` 作为单设备查询参数。
+3. 该链返回 `device_fingerprint`（内部稳定绑定键）、`device_id`（用户自定义设备编号）以及 `connection_type` / `connection_label`（连接标识）。
+4. 后台设备监控不应复用该链路做原文展示。
 ```
 
 ## 管理员接口
@@ -98,7 +98,7 @@ GET  /admin/api/login-logs/
 1. /admin/api/dashboard 是当前管理后台 Dashboard 的真实数据源。
 2. /admin/api/dashboard 当前返回工作台聚合字段，包括 today_accounting / level_distribution /
    expiring_auths / online_devices / active_projects_data / system_health。
-3. /admin/api/devices/* 属于后台设备监控链，当前统一返回 masked/hash 口径，不返回设备指纹原文。
+3. /admin/api/devices/* 属于后台设备监控链，当前直接返回设备原文字段与连接标识字段。
 4. 用户详情页设备绑定另走 /admin/api/users/{user_id}/devices，不与 /admin/api/devices/* 混为一条链。
 5. /admin/api/updates/* 属于管理端热更新链路，当前按 `project_id + client_type` 组织。
 

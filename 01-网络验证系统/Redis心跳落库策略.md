@@ -411,12 +411,6 @@ user_id + game_project_id + device_fingerprint
 3. 游戏 A 的设备不应占用游戏 B 的设备名额。
 ```
 
-关联待决策：
-
-```text
-T032: device_binding 是否迁移到 user_id + game_project_id + device_fingerprint 维度？
-```
-
 ---
 
 ## 七、Redis Key 设计
@@ -476,7 +470,7 @@ device_fp:
 ```text
 1. 单台设备唯一定位。
 2. Redis 中同一设备心跳覆盖更新。
-3. Celery UPSERT 到 device_runtime.device_id。
+3. Celery UPSERT 到 device_runtime.device_fingerprint。
 ```
 
 ---
@@ -497,7 +491,10 @@ device_fp:
     "gold": 1024
   },
   "user_id": 1001,
-  "game_id": 1
+  "game_id": 1,
+  "device_id": "A-001",
+  "connection_type": "usb",
+  "connection_label": "SN:TEST1234"
 }
 ```
 
@@ -510,6 +507,9 @@ device_fp:
 | `game_data` | AndroidScript | 游戏自定义数据 |
 | `user_id` | Verify 当前用户 | 主库 user.id |
 | `game_id` | Verify 当前项目 | 主库 game_project.id |
+| `device_id` | AndroidScript / Verify | 用户自定义设备编号 |
+| `connection_type` | AndroidScript | 连接类型：usb / tcp / unknown |
+| `connection_label` | AndroidScript | USB 显示 SN；TCP 显示 IP:端口 |
 
 ### 7.2.1 时间来源
 

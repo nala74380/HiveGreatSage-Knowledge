@@ -128,7 +128,7 @@ Token 刷新:
 7. installLrPkg 是否在目标设备和运行模式下成功。
 8. 当前热更新是否校验 SHA-256。
 9. 当前强制更新失败是否会阻断继续运行。
-10. IMSI 上传接口是否需要由 AndroidScript 主动调用。
+9. 当前设备标识实机采集（USB SN / TCP IP:端口）是否与 UI、Verify、PCControl 展示完全一致。
 ```
 
 ### 2.3 当前风险最高的点
@@ -139,7 +139,7 @@ Token 刷新:
 3. 当前 Updater 未见 SHA-256 校验。
 4. Heartbeat 遇到 401 会刷新 Token，但本次心跳不会立即重试。
 5. CloudSync / Updater 遇到 401 当前没有统一 ensure_token 重试逻辑。
-6. Verify.get_fingerprint 会尝试读取 IMSI，但当前未见调用 /api/device/imsi 主动上传 IMSI。
+6. 当前设备标识已改为 `device_fingerprint + device_id + connection_type + connection_label`，仍需真机验证 USB / TCP 场景实际采集值。
 7. Config.API_BASE_URL 依赖 UI 或 KV 输入，三端联调前必须固定测试地址。
 ```
 
@@ -183,12 +183,14 @@ Config.LOG_TO_CLOUD = true
 职责：
 
 ```text
-1. 获取设备指纹。
-2. 登录 Verify。
-3. 保存 Access Token / Refresh Token。
-4. 刷新 Token。
-5. 自动重新登录。
-6. 登出 Verify。
+1. 获取设备内部稳定绑定键。
+2. 读取和保存用户自定义 device_id。
+3. 生成 connection_type / connection_label。
+4. 登录 Verify。
+5. 保存 Access Token / Refresh Token。
+6. 刷新 Token。
+7. 自动重新登录。
+8. 登出 Verify。
 ```
 
 ### 3.3 心跳模块
@@ -440,9 +442,9 @@ KEY_VERSION = "hive_script_version"
 
 ---
 
-## 五、设备指纹契约
+## 五、设备标识契约
 
-## 5.1 当前指纹优先级
+## 5.1 当前稳定绑定键优先级
 
 `Verify.get_fingerprint()` 当前优先级：
 
@@ -450,64 +452,31 @@ KEY_VERSION = "hive_script_version"
 1. 老狼孩插件:
    设备.取硬件序列号()
 
-2. 懒人精灵内置:
-   getSubscriberId()
-
-3. WiFi MAC:
-   getWifiMac()
-
-4. 兜底:
+2. 兜底:
    "fb_" .. os.time()
 ```
 
-### 5.2 登录请求字段
+### 5.2 设备标识分层
 
-```lua
-device_fingerprint = fp
+```text
+device_fingerprint:
+  内部稳定绑定键，用于登录绑定、心跳归属、运行时数据关联。
+
+device_id:
+  用户自定义设备编号，用于业务展示和人工识别。
+
+connection_type / connection_label:
+  连接标识。
+  USB → SN:xxxx
+  TCP → IP:端口
 ```
 
-### 5.3 心跳请求字段
-
-```lua
-device_fingerprint = Verify.get_fingerprint()
-```
-
-### 5.4 风险点
+### 5.3 风险点
 
 ```text
 1. 时间戳兜底不稳定，重启后可能变化。
-2. IMSI 属于敏感信息，是否作为指纹需要合规确认。
-3. WiFi MAC 在部分安卓版本可能不可读或固定返回。
-4. 硬件序列号依赖插件和运行模式。
-```
-
-### 5.5 建议方案
-
-```text
-1. 首次获取稳定指纹后写入 KV。
-2. 后续优先读取 KV 中 hive_device_fingerprint。
-3. 只有 KV 为空时才重新探测。
-4. 时间戳兜底生成后也必须持久化。
-5. UI 或日志中只显示指纹后 6 位。
-```
-
-### 5.6 推荐改造口径
-
-```lua
-local KEY_DEVICE_FINGERPRINT = "hive_device_fingerprint"
-
-function Verify.get_fingerprint()
-    if _fingerprint then return _fingerprint end
-
-    local saved = readKeyVal(KEY_DEVICE_FINGERPRINT)
-    if saved and saved ~= "" then
-        _fingerprint = saved
-        return _fingerprint
-    end
-
-    -- 再执行插件 / IMSI / MAC / 时间戳探测
-    -- 探测成功后 writeKeyVal(KEY_DEVICE_FINGERPRINT, _fingerprint)
-end
+2. 硬件序列号依赖插件和运行模式。
+3. USB / TCP 场景的 connection_label 仍需真机确认最终采集值。
 ```
 
 ---
@@ -542,6 +511,9 @@ POST /api/auth/login
   "password": "<password_from_secure_input>",
   "project_uuid": "<project_uuid_example_or_test_value>",
   "device_fingerprint": "<device_fingerprint_example>",
+  "device_id": "<user_defined_device_id>",
+  "connection_type": "usb",
+  "connection_label": "SN:TEST1234",
   "client_type": "android"
 }
 ```
@@ -554,6 +526,9 @@ POST /api/auth/login
     password           = password,
     project_uuid       = Config.PROJECT_UUID,
     device_fingerprint = fp,
+    device_id          = custom_device_id,
+    connection_type    = connection_type,
+    connection_label   = connection_label,
     client_type        = "android",
 }
 ```
@@ -650,7 +625,9 @@ POST /api/auth/refresh
 
 ```json
 {
-  "refresh_token": "..."
+  "refresh_token": "...",
+  "device_fingerprint": "<device_fingerprint_example>",
+  "client_type": "android"
 }
 ```
 
@@ -660,7 +637,7 @@ POST /api/auth/refresh
 1. 从 KV 读取 hive_refresh_token。
 2. 调用 /api/auth/refresh。
 3. 成功后更新 access_token。
-4. 写入 hive_access_token。
+4. 如果后端返回新的 refresh_token，则同步写入 hive_refresh_token。
 ```
 
 ### 风险点
@@ -1425,51 +1402,11 @@ local save_path = getWorkPath() .. "update_" .. tostring(check.latest_version) .
 
 ## 十、当前未调用的 Verify 接口
 
-## 10.1 `/api/device/imsi`
+## 10.1 `/api/auth/me`
 
-### 后端已有接口
+当前未见调用。
 
-Verify 已有：
-
-```text
-POST /api/device/imsi
-```
-
-### AndroidScript 当前状态
-
-当前源码未见主动调用该接口。
-
-虽然 `Verify.get_fingerprint()` 会尝试：
-
-```lua
-getSubscriberId()
-```
-
-但这是作为设备指纹来源之一，不等于调用 `/api/device/imsi` 上传。
-
-### 待决策
-
-```text
-T-AS-001:
-AndroidScript 是否需要主动上传 IMSI？
-```
-
-### 建议方案
-
-默认不主动上传 IMSI。
-
-如果确实需要：
-
-```text
-1. 增加 Config.ENABLE_IMSI_UPLOAD = false。
-2. 只有开启时才调用 /api/device/imsi。
-3. 上传前脱敏或 hash。
-4. 后台默认脱敏展示。
-```
-
----
-
-## 10.2 `/api/auth/me`
+建议用途：
 
 当前未见调用。
 
