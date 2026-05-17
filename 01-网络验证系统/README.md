@@ -54,18 +54,34 @@
 - [[01-网络验证系统/源码文件逐项审查清单]]
 - [[01-网络验证系统/测试基线]]
 - [[01-网络验证系统/热更新端到端测试清单]]
+- [[01-网络验证系统/开发启动流程]]
+
+## 当前主线收口
+
+当前 Verify 主线已统一到以下口径：
+
+```text
+1. 实现状态 → 实现状态对照表.md
+2. 风险与未闭环项 → 风险与待决策清单.md
+3. 文档/代码/测试证据映射 → 文档代码测试追踪矩阵.md
+4. 设备契约 → 接入契约.md
+5. API 导航 → API路由清单.md
+6. OpenAPI 契约治理 → OpenAPI快照与接口契约治理规范.md
+7. 测试运行入口与环境前提 → 开发启动流程.md + 测试基线.md
+```
 
 ## 当前 P0 工作
 
-1. 热更新链路运行验证：`tests/test_update.py`、`tests/test_update_admin.py`、管理端上传、客户端检查与下载。
-2. 热更新三端联调：Verify + PCControl + AndroidScript 端到端闭环。
-3. AndroidScript 文件级 SHA-256 校验方案确认与实机安装闭环验证。
-4. PC 中控登录是否占用 Android 授权设备数的边界确认。
-5. 旧 User 授权字段清理。
-6. 新 accounting 账务中心替代旧 balance 后的完整回归验证。
-7. IMSI 合规边界决策。
-8. nginx `/updates/` 下载鉴权闭环。
-9. 最新 pytest + frontend build + 三端联调基线重跑。
+1. 按 [[01-网络验证系统/开发启动流程]] 启动 WSL PostgreSQL / Redis 与 PowerShell `conda activate TZYMIR` 环境。
+2. 重新运行 `tests/test_admin.py` 与 `tests/test_device_admin.py`，确认测试契约回收后的最小验证集。
+3. 热更新链路运行验证：`tests/test_update.py`、`tests/test_update_admin.py`、管理端上传、客户端检查与下载。
+4. 热更新三端联调：Verify + PCControl + AndroidScript 端到端闭环。
+5. AndroidScript 文件级 SHA-256 校验方案确认与实机安装闭环验证。
+6. PC 中控登录是否占用 Android 授权设备数的边界确认。
+7. 新 accounting 账务中心替代旧 balance 后的完整回归验证。
+8. IMSI 合规边界决策。
+9. nginx `/updates/` 下载鉴权闭环。
+10. 最新 pytest + frontend build + 三端联调基线重跑。
 
 ## 当前登记进展
 

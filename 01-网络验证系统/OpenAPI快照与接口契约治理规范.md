@@ -93,13 +93,17 @@ app = FastAPI(
 /api/device
 /api/params
 /api/update
+/api/client
+/api/stats
 /admin/api
 /admin/api/projects
 /admin/api/updates
 /admin/api/devices
-/api/stats
 /admin/api/project-access
-/admin/api
+/admin/api/accounting
+/admin/api/prices
+/admin/api/system-settings
+/admin/api/audit-logs
 ```
 
 对应模块：
@@ -109,19 +113,20 @@ auth
 users
 agents
 project_access_agent
-agents
 device
 params
 update
+system_settings.client_router
+stats
 admin
 projects
 update_admin
 device_admin
-stats
+project_access_admin
 accounting
 pricing
-project_access_admin
-agent_profile_admin
+system_settings.admin_router
+audit_admin
 ```
 
 ---
@@ -158,13 +163,17 @@ OpenAPI 快照不仅要记录接口路径，还要辅助发现路由顺序风险
 源码已集中注册路由。
 API 路由清单已有人工整理。
 前后端接口对照表已有反向整理。
+已确认存在终端用户设备链 /api/device/*、后台设备监控链 /admin/api/devices/*、
+以及用户详情设备绑定链 /admin/api/users/{user_id}/devices 的三条设备链边界。
+已确认 /admin/api/dashboard 与 /api/stats/platform 当前并行为两条统计视图链，
+前者偏工作台聚合，后者偏标准摘要接口。
 但尚未建立“每阶段强制生成 OpenAPI 快照”的治理制度。
 ```
 
 风险等级：
 
 ```text
-P2 中风险。
+P1 中风险。
 ```
 
 原因：
@@ -174,6 +183,7 @@ P2 中风险。
 2. Web 前端、PCControl、AndroidScript 都依赖 Verify。
 3. 手写 API 文档容易落后于源码。
 4. 路由路径、字段、响应结构变化后，三端可能不同步。
+5. 设备链与统计链当前已出现多入口并行，若不做快照治理更容易再次漂移。
 ```
 
 ---
