@@ -546,9 +546,6 @@ POST /api/auth/login
   "password": "<password_from_secure_input>",
   "project_uuid": "项目 UUID",
   "device_id": "pc_control_uuid",
-  "device_id": "pc_control_uuid",
-  "connection_type": "tcp",
-  "connection_label": "http://127.0.0.1:8000",
   "client_type": "pc"
 }
 ```
@@ -561,9 +558,6 @@ POST /api/auth/login
     "password": password,
     "project_uuid": self._config.get("server.project_uuid", ""),
     "device_id": hardware_serial,
-    "device_id": hardware_serial,
-    "connection_type": "tcp",
-    "connection_label": self._config.get("server.api_base_url", "") or "pc",
     "client_type": CLIENT_TYPE,
 }
 ```
@@ -574,6 +568,8 @@ POST /api/auth/login
 CLIENT_TYPE = pc
 hardware_serial 来自 config/device_id.txt。
 当前开发期沿用该本机文件保存 PC 端设备编号。
+connection_type / connection_label 只属于 PC 中控本地 ADB 查询后的显示信息，
+不再作为 Verify 登录契约字段上传。
 ```
 
 ### 成功处理
