@@ -62,7 +62,7 @@
    同 user_id 每分钟最多 4 次。
 
 3. Redis 心跳 Key
-   device:runtime:{game_id}:{user_id}:{device_fp}
+   device:runtime:{game_id}:{user_id}:{device_id}
 
 4. Redis 心跳 TTL
    120 秒。
@@ -212,7 +212,7 @@ AndroidScript
            ▼
 ┌─────────────────────────────────────────────────┐
 │                    Redis                         │
-│ device:runtime:{game_id}:{user_id}:{device_fp}   │
+│ device:runtime:{game_id}:{user_id}:{device_id}   │
 │ TTL = 120 秒                                     │
 └──────────┬──────────────────────────────────────┘
            │
@@ -264,7 +264,7 @@ User Token
 
 ```json
 {
-  "device_fingerprint": "android_device_001",
+  "device_id": "android_device_001",
   "status": "running",
   "game_data": {
     "current_task": "daily",
@@ -367,7 +367,7 @@ _HEARTBEAT_RATE_WINDOW = 60
 
 ```text
 DeviceBinding.user_id == current_user.id
-DeviceBinding.device_fingerprint == body.device_fingerprint
+DeviceBinding.device_id == body.device_id
 DeviceBinding.status == "active"
 ```
 
@@ -383,7 +383,7 @@ detail = "设备未绑定到当前账号，拒绝上报"
 防止：
 
 ```text
-1. 用户伪造其他设备指纹。
+1. 用户伪造其他设备编号。
 2. 未授权设备刷心跳。
 3. 脚本绕过登录直接上报。
 4. PC 端看到不属于自己的设备。
@@ -394,13 +394,13 @@ detail = "设备未绑定到当前账号，拒绝上报"
 当前设备绑定校验只看：
 
 ```text
-user_id + device_fingerprint
+user_id + device_id
 ```
 
 长期建议改为：
 
 ```text
-user_id + game_project_id + device_fingerprint
+user_id + game_project_id + device_id
 ```
 
 原因：
@@ -420,7 +420,7 @@ user_id + game_project_id + device_fingerprint
 当前 Key：
 
 ```text
-device:runtime:{game_id}:{user_id}:{device_fp}
+device:runtime:{game_id}:{user_id}:{device_id}
 ```
 
 示例：
@@ -444,8 +444,8 @@ game_id:
 user_id:
   当前用户 ID。
 
-device_fp:
-  安卓设备指纹。
+device_id:
+  安卓设备编号。
 ```
 
 ### 7.1.1 为什么包含 game_id
@@ -465,12 +465,12 @@ device_fp:
 3. 降低 PC 查询时后端再过滤成本。
 ```
 
-### 7.1.3 为什么包含 device_fp
+### 7.1.3 为什么包含 device_id
 
 ```text
 1. 单台设备唯一定位。
 2. Redis 中同一设备心跳覆盖更新。
-3. Celery UPSERT 到 device_runtime.device_fingerprint。
+3. Celery UPSERT 到 device_runtime.device_id。
 ```
 
 ---
@@ -507,7 +507,7 @@ device_fp:
 | `game_data` | AndroidScript | 游戏自定义数据 |
 | `user_id` | Verify 当前用户 | 主库 user.id |
 | `game_id` | Verify 当前项目 | 主库 game_project.id |
-| `device_id` | AndroidScript / Verify | 用户自定义设备编号 |
+| `device_id` | AndroidScript / Verify | 用户填写设备编号 |
 | `connection_type` | AndroidScript | 连接类型：usb / tcp / unknown |
 | `connection_label` | AndroidScript | USB 显示 SN；TCP 显示 IP:端口 |
 
@@ -591,7 +591,7 @@ token:blacklist:{jti}
 refresh:{user_id}:{jti}
 rt_lookup:{sha256(rt_value)[:32]}
 ratelimit:{endpoint_tag}:{identifier}
-device:runtime:{game_id}:{user_id}:{device_fp}
+device:runtime:{game_id}:{user_id}:{device_id}
 ```
 
 建议后续新增独立文档：
@@ -668,7 +668,7 @@ PCControl 设备表至少显示：
 接口：
 
 ```text
-GET /api/device/data?device_fingerprint=...
+GET /api/device/data?device_id=...
 ```
 
 查询顺序：
@@ -1225,7 +1225,7 @@ PCControl 看到 is_online=false。
 □ AndroidScript 登录成功。
 □ device_binding 有记录。
 □ AndroidScript POST /api/device/heartbeat 返回 200。
-□ Redis 出现 device:runtime:{game_id}:{user_id}:{device_fp}。
+□ Redis 出现 device:runtime:{game_id}:{user_id}:{device_id}。
 □ PCControl GET /api/device/list 能看到 is_online=true。
 □ 等待 30 秒。
 □ Celery 日志出现 flush_device_heartbeats。
@@ -1432,13 +1432,13 @@ AndroidScript 如果上报 starting / paused / updating / stopped，会返回 42
 当前绑定校验：
 
 ```text
-user_id + device_fingerprint
+user_id + device_id
 ```
 
 长期建议：
 
 ```text
-user_id + game_project_id + device_fingerprint
+user_id + game_project_id + device_id
 ```
 
 风险：
@@ -1583,7 +1583,7 @@ Verify 设备心跳链路采用：
 ```text
 AndroidScript
   → POST /api/device/heartbeat
-  → Redis device:runtime:{game_id}:{user_id}:{device_fp}
+  → Redis device:runtime:{game_id}:{user_id}:{device_id}
   → Celery 每 30 秒批量 UPSERT
   → PostgreSQL 游戏库 device_runtime
 ```text
@@ -1649,7 +1649,7 @@ Step 6:
 
 Step 7:
   检查 Redis Key:
-  device:runtime:{game_id}:{user_id}:{device_fp}
+  device:runtime:{game_id}:{user_id}:{device_id}
 
 Step 8:
   PCControl 拉设备列表。

@@ -184,7 +184,7 @@ Refresh Token 仍是不透明随机字符串，不是 JWT。Redis 主数据保�
   "rt_value": "...",
   "user_id": 1001,
   "jti": "...",
-  "device_fingerprint": "...",
+  "device_id": "...",
   "client_type": "android",
   "game_project_code": "game_001",
   "token_version": 0
@@ -194,7 +194,7 @@ Refresh Token 仍是不透明随机字符串，不是 JWT。Redis 主数据保�
 Refresh 时必须校验：
 
 ```text
-device_fingerprint 一致
+device_id 一致
 client_type 一致
 rt_data.token_version == user.token_version
 用户 active
@@ -214,7 +214,7 @@ Content-Type: application/json
 ```json
 {
   "refresh_token": "...",
-  "device_fingerprint": "当前设备指纹",
+  "device_id": "当前设备编号",
   "client_type": "pc 或 android"
 }
 ```

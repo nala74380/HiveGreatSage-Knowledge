@@ -97,7 +97,7 @@
   · 工作室固定 IP 场景下「填一次，永久用」
 
 数据流向:
-  · 安卓启动 → startWebSocket → onOpened → 上报设备指纹+用户token认证
+  · 安卓启动 → startWebSocket → onOpened → 上报设备编号+用户token认证
   · PC 收到认证 → 加入设备列表 → 推送当前任务/参数
   · 通信全程双向：PC 推送指令、安卓推送状态/结果
   · 断线 → 安卓 onClosed 触发重连（3 秒间隔）

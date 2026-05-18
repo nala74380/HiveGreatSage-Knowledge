@@ -400,7 +400,7 @@ POST /api/auth/refresh
 
 ```text
 1. 通过 rt_lookup 反查 Refresh Token 主 Key。
-2. 读取 user_id / jti / device_fingerprint / game_project_code。
+2. 读取 user_id / jti / device_id / game_project_code。
 3. 查询 User。
 4. 用户存在且 active。
 5. 签发新的 Access Token。
@@ -1509,7 +1509,7 @@ token_version
   "rt_value": "...",
   "user_id": 1001,
   "jti": "...",
-  "device_fingerprint": "...",
+  "device_id": "...",
   "game_project_code": "game_001",
   "token_version": 0
 }

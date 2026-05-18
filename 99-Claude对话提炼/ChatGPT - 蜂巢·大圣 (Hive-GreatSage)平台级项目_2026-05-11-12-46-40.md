@@ -301,7 +301,7 @@ data["root"]["hierarchy_depth"] == 1
 
 ```text
 refresh_token
-device_fingerprint
+device_id
 client_type
 ```
 

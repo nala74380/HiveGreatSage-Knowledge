@@ -139,7 +139,7 @@ Token 刷新:
 3. 当前 Updater 未见 SHA-256 校验。
 4. Heartbeat 遇到 401 会刷新 Token，但本次心跳不会立即重试。
 5. CloudSync / Updater 遇到 401 当前没有统一 ensure_token 重试逻辑。
-6. 当前设备标识已改为 `device_fingerprint + device_id + connection_type + connection_label`，仍需真机验证 USB / TCP 场景实际采集值。
+6. 当前设备标识已改为 `device_id + connection_type + connection_label`，仍需真机验证 USB / TCP 场景实际采集值。
 7. Config.API_BASE_URL 依赖 UI 或 KV 输入，三端联调前必须固定测试地址。
 ```
 
@@ -183,7 +183,7 @@ Config.LOG_TO_CLOUD = true
 职责：
 
 ```text
-1. 获取设备内部稳定绑定键。
+1. 获取设备编号。
 2. 读取和保存用户自定义 device_id。
 3. 生成 connection_type / connection_label。
 4. 登录 Verify。
@@ -444,9 +444,9 @@ KEY_VERSION = "hive_script_version"
 
 ## 五、设备标识契约
 
-## 5.1 当前稳定绑定键优先级
+## 5.1 当前稳定设备编号优先级
 
-`Verify.get_fingerprint()` 当前优先级：
+`Verify.get_device_id()` 当前优先级：
 
 ```text
 1. 老狼孩插件:
@@ -459,11 +459,11 @@ KEY_VERSION = "hive_script_version"
 ### 5.2 设备标识分层
 
 ```text
-device_fingerprint:
-  内部稳定绑定键，用于登录绑定、心跳归属、运行时数据关联。
+device_id:
+  设备编号，用于登录绑定、心跳归属、运行时数据关联。
 
 device_id:
-  用户自定义设备编号，用于业务展示和人工识别。
+  用户填写设备编号，用于业务展示和人工识别。
 
 connection_type / connection_label:
   连接标识。
@@ -510,8 +510,7 @@ POST /api/auth/login
   "username": "<username_from_input>",
   "password": "<password_from_secure_input>",
   "project_uuid": "<project_uuid_example_or_test_value>",
-  "device_fingerprint": "<device_fingerprint_example>",
-  "device_id": "<user_defined_device_id>",
+  "device_id": "<device_id_from_input>",
   "connection_type": "usb",
   "connection_label": "SN:TEST1234",
   "client_type": "android"
@@ -525,7 +524,6 @@ POST /api/auth/login
     username           = username,
     password           = password,
     project_uuid       = Config.PROJECT_UUID,
-    device_fingerprint = fp,
     device_id          = custom_device_id,
     connection_type    = connection_type,
     connection_label   = connection_label,
@@ -626,7 +624,7 @@ POST /api/auth/refresh
 ```json
 {
   "refresh_token": "...",
-  "device_fingerprint": "<device_fingerprint_example>",
+  "device_id": "<device_id_example>",
   "client_type": "android"
 }
 ```
@@ -675,7 +673,7 @@ Verify.ensure_token()
 ```text
 1. 优先尝试 refresh_token。
 2. 如果 refresh 失败，从 KV 读取 username/password。
-3. 密码如果是加密格式，则用设备指纹解密。
+3. 密码如果是加密格式，则用设备编号解密。
 4. 调用 Verify.login 重新登录。
 ```
 
@@ -691,14 +689,14 @@ Verify.ensure_token()
 
 ```text
 1. 密码仍然以可逆加密形式保存在本地 KV。
-2. 设备指纹变化会导致密码无法解密。
-3. 如果 Verify.get_fingerprint 兜底时间戳变化，解密会失败。
+2. 设备编号变化会导致密码无法解密。
+3. 如果 Verify.get_device_id 兜底时间戳变化，解密会失败。
 ```
 
 ### 建议方案
 
 ```text
-1. 设备指纹必须持久化。
+1. 设备编号必须持久化。
 2. 密码本地保存应尽量避免，长期改为 Refresh Token 续期。
 3. 如果解密失败，应提示用户重新登录，而不是静默失败。
 ```
@@ -828,7 +826,7 @@ POST /api/device/heartbeat
 
 ```lua
 {
-    device_fingerprint = Verify.get_fingerprint(),
+    device_id = Verify.get_device_id(),
     status             = _status,
     game_data          = _game_data,
 }
@@ -838,7 +836,7 @@ JSON 示例：
 
 ```json
 {
-  "device_fingerprint": "android_device_001",
+  "device_id": "android_device_001",
   "status": "running",
   "game_data": {
     "current_task": "daily",
@@ -1546,14 +1544,14 @@ end
 | `username` | UI 输入 | 是 | 用户账号 |
 | `password` | UI 输入 | 是 | 用户密码 |
 | `project_uuid` | `Config.PROJECT_UUID` | 是 | 游戏项目 UUID |
-| `device_fingerprint` | `Verify.get_fingerprint()` | 是 | 安卓设备指纹 |
+| `device_id` | `Verify.get_device_id()` | 是 | 安卓设备编号 |
 | `client_type` | 固定 `"android"` | 是 | 安卓端登录 |
 
 ## 12.2 AndroidScript → Verify 心跳字段
 
 | 字段 | 当前来源 | 必填 | 说明 |
 |---|---|---|---|
-| `device_fingerprint` | `Verify.get_fingerprint()` | 是 | 当前设备指纹 |
+| `device_id` | `Verify.get_device_id()` | 是 | 当前设备编号 |
 | `status` | `Heartbeat.set_status()` | 是 | 当前运行状态 |
 | `game_data` | `Heartbeat.set_game_data()` | 否 | 游戏运行数据 |
 
@@ -1661,7 +1659,7 @@ expires_at
 □ 热更新增加 SHA-256 校验。
 □ 强制更新失败时阻断继续运行。
 □ 本地版本号改为新包启动后写入。
-□ 设备指纹持久化。
+□ 设备编号持久化。
 ```
 
 ## 14.3 P2：长期治理
@@ -1698,7 +1696,7 @@ expires_at
 ```text
 □ access_token 过期后 refresh 成功。
 □ refresh_token 失效后重新登录成功。
-□ 设备指纹变化时密码解密失败可提示重新登录。
+□ 设备编号变化时密码解密失败可提示重新登录。
 □ logout 后本地 token 清空。
 ```
 
@@ -1707,7 +1705,7 @@ expires_at
 ```text
 □ 登录成功后启动心跳线程。
 □ 心跳间隔约 30 秒。
-□ 心跳体包含 device_fingerprint。
+□ 心跳体包含 device_id。
 □ 心跳体包含 status。
 □ 心跳体包含 game_data。
 □ Verify Redis 中出现在线态。
@@ -1825,7 +1823,7 @@ user_level
 
 ### 背景
 
-AndroidScript 当前已经接入 Verify 登录、心跳、参数、热更新等核心接口，但部分错误处理、热更新校验、设备指纹持久化仍需治理。
+AndroidScript 当前已经接入 Verify 登录、心跳、参数、热更新等核心接口，但部分错误处理、热更新校验、设备编号持久化仍需治理。
 
 ### 决策
 
@@ -1861,7 +1859,7 @@ AndroidScript 不负责：
 ### 后续动作
 
 ```text
-□ 补设备指纹持久化。
+□ 补设备编号持久化。
 □ 补热更新 SHA-256 校验。
 □ 补强制更新失败阻断。
 □ 补 401 自动刷新后重试。
@@ -1881,7 +1879,7 @@ AndroidScript 不负责：
 1. 登录 Verify。
 2. 保存 Access Token / Refresh Token。
 3. Refresh Token 自动刷新。
-4. 安卓设备指纹生成。
+4. 安卓设备编号生成。
 5. 心跳上报。
 6. 云端参数拉取。
 7. 云端参数保存函数。
@@ -1897,7 +1895,7 @@ AndroidScript 不负责：
 ```text
 AndroidScript Verify 接口调用源码已成型；
 下一步必须进入实机联调；
-热更新校验、设备指纹持久化、401 重试、强制更新失败处理、IMSI 合规策略仍需修订。
+热更新校验、设备编号持久化、401 重试、强制更新失败处理、IMSI 合规策略仍需修订。
 ```
 
 当前下一步：

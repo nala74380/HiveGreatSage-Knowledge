@@ -67,8 +67,8 @@ GET  /api/client/network-config
 
 ```text
 1. /api/device/list 与 /api/device/data 属于终端用户设备链。
-2. 该链当前以 `device_fingerprint` 作为单设备查询参数。
-3. 该链返回 `device_fingerprint`（内部稳定绑定键）、`device_id`（用户自定义设备编号）以及 `connection_type` / `connection_label`（连接标识）。
+2. 该链当前以 `device_id` 作为单设备查询参数。
+3. 该链返回 `device_id`（设备编号）以及 `connection_type` / `connection_label`（连接标识）。
 4. 后台设备监控不应复用该链路做原文展示。
 ```
 

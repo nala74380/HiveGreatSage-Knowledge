@@ -9942,7 +9942,7 @@ var require_x509 = __commonJS({
           bytes = asn1.toDer(pki2.publicKeyToAsn1(key)).getBytes();
           break;
         default:
-          throw new Error('Unknown fingerprint type "' + options.type + '".');
+          throw new Error('Unknown device_id type "' + options.type + '".');
       }
       md.start();
       md.update(bytes);

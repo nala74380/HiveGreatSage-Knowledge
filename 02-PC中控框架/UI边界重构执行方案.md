@@ -448,7 +448,7 @@ core/settings/settings_validator.py
 5. 设备表双击或右键“编辑/设置”打开该对话框。
 6. 本地 profile 只作为草稿，字段必须包含：
    - `draft_id`
-   - `device_fingerprint`
+   - `device_id`
    - `synced`
    - `synced_at`
    - `remote_version` 或 `remote_revision`（若后端未提供则标记待确认）
