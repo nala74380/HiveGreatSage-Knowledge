@@ -260,7 +260,7 @@ function _build_ui(name)
     ui.addTextView("tab_login", "lbl_password", "密码")
     ui.addEditText("tab_login", "edit_password", "", -1)
     ui.newRow("tab_login", "row_l2")
-    ui.addTextView("tab_login", "lbl_device", "编号（选填）")
+    ui.addTextView("tab_login", "lbl_device", "设备编号（必填）")
     ui.addEditText("tab_login", "edit_device", "", -1)
     ui.newRow("tab_login", "row_l3")
 
