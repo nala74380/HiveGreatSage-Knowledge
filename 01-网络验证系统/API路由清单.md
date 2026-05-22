@@ -2,8 +2,8 @@
 文件位置: 01-网络验证系统/API路由清单.md
 名称: API路由清单
 作者: 蜂巢·大圣 (HiveGreatSage)
-时间: 2026-05-18
-版本: V1.2.5
+时间: 2026-05-22
+版本: V1.2.6
 状态: 草稿
 关联文档:
   - "[[00-项目总控/项目总大纲]]"
@@ -15,6 +15,7 @@
   - "[[01-网络验证系统/接入契约]]"
   - "[[01-网络验证系统/API鉴权方案]]"
 变更记录:
+  - V1.2.6 (2026-05-22): 更新 OpenAPI 快照至 2026-05-21（142 paths / 121 schemas）
   - V1.2.5 (2026-05-18): 批次12收口；授权 PATCH 直改已下线，/users/:id 与 UserDetail 已下线，用户治理统一到 /users 工作台
   - V1.2.4 (2026-05-18): 批次11文档收口；已重新导出 OpenAPI 快照（112 paths / 97 schemas）并补充当前未收口差异（授权直改与用户详情双入口仍在）
   - V1.2.3 (2026-05-18): 用户授权升级接口新增 mode=topup_align（补时并批扣点）；升级预览/执行模式统一为 append / average / topup_align
@@ -37,8 +38,7 @@
 
 - 本文件是手写 API 导航清单，只作为 D1 级文档索引。
 - 字段、请求体、响应体、状态码必须以 FastAPI OpenAPI 快照和源码为准。
-- 本轮已执行 `python scripts/export_openapi.py`，产物：`HiveGreatSage-Verify/docs/openapi/openapi_2026-05-17.json`、`openapi_routes_2026-05-17.md`（脚本按 UTC 命名）。
-- 本轮已执行最小回归：`conda run -n TZYMIR python -m pytest tests/test_admin.py tests/test_authorization_upgrade.py tests/test_accounting.py tests/test_device.py -q`，结果 `53 passed`。
+- 本轮已执行 `python scripts/export_openapi.py`，产物：`HiveGreatSage-Verify/docs/openapi/openapi_2026-05-21.json`、`openapi_routes_2026-05-21.md`（142 paths / 121 schemas）。
 - 不得把本文中的路由存在直接写成"接口已联调通过"。
 
 ## 终端 User 接口
